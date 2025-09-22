@@ -39,10 +39,10 @@ find . -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1
 cd "${SRC_DIR}" || exit 1
 
 # Generate dynamic files list for RPM packaging
-> "%{buildroot}/files.list"
-find "%{buildroot}" -type f | sed 's|^%{buildroot}||' | sort >> "%{buildroot}/files.list"
-> "%{buildroot}/dirs.list"
-find "%{buildroot}" -type d | sed 's|^%{buildroot}||' | sort | grep -v '^/$' >> "%{buildroot}/dirs.list"
+> files.list
+find "%{buildroot}" -type f | sed 's|^%{buildroot}||' | sort >> files.list
+> dirs.list
+find "%{buildroot}" -type d | sed 's|^%{buildroot}||' | sort | grep -v '^/$' >> dirs.list
 
 tree "${BLD_DIR}"
 
