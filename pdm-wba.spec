@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.0.8
+Version: 1.0.9
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -76,6 +76,8 @@ if [ $1 -eq 1 ]; then
     systemctl daemon-reload >/dev/null 2>&1 || :
     # Apply tmp files
     systemd-tmpfiles --create >/dev/null 2>&1 || :
+    # Run pdm-wba-init.service
+    systemctl start pdm-wba-init.service >/dev/null 2>&1 || :
 fi
 
 %postun
@@ -96,5 +98,5 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
-* Mon Sep 22 2025 PDM WBA Packager - 1.0.8
+* Mon Sep 22 2025 PDM WBA Packager - 1.0.9
 - Initial package
