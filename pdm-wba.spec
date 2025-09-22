@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.0.4
+Version: 1.0.5
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -26,8 +26,8 @@ BLD_DIR=%{buildroot}
 # Go to source dir
 cd "${WBA_DIR}" || exit 1
 
-# 1. Generate list of directories for restorecon
-find . -type d -not -name '.' | sed 's|^./|/|' | grep -v '^/$' > "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
+# 1. Generate list of directories for restorecon (only dirs with files)
+find . -type f | sed 's|/[^/]*$||' | sed 's|^./|/|' | sort -u | grep -v '^/[^/]*$' > "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
 cat "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
 # 2. Directories → 755
 find . -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#./}"' _ {} \;
@@ -84,5 +84,5 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
-* Mon Sep 22 2025 PDM WBA Packager - 1.0.3
+* Mon Sep 22 2025 PDM WBA Packager - 1.0.5
 - Initial package
