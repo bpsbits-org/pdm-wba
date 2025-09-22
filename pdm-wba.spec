@@ -48,8 +48,8 @@ tree "${BLD_DIR}"
 
 %files
 %defattr(-,root,root,-)
-%files -f /files.list
-%dir -f /dirs.list
+%files -f files.list
+%dir -f dirs.list
 
 %post
 if [ -f /usr/local/etc/pdm-wba/cnf/dirs-rs-con ]; then
