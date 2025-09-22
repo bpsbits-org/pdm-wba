@@ -27,7 +27,8 @@ cp -r %{_topdir}/SOURCES/* ./
 # Create tmp dir in buildroot
 mkdir -p %{buildroot}/tmp
 
-echo "build directory structure:"
+echo "install directory structure:"
+ls -lha /var/lib/copr-rpmbuild/workspace/*/%{name}/src/_raw
 pwd
 ls -lha
 
