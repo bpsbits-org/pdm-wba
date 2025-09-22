@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.0.7
+Version: 1.0.8
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -59,7 +59,6 @@ if [ -f /usr/local/etc/pdm-wba/cnf/dirs-rs-con ]; then
     cat /usr/local/etc/pdm-wba/cnf/dirs-rs-con | while read -r dir; do
         [ -n "$dir" ] && [ -e "/$dir" ] && restorecon -Rv "/$dir" 2>/dev/null || :
     done
-    rm -f /usr/local/etc/pdm-wba/cnf/dirs-rs-con
 fi
 
 # Enable the systemd service
@@ -71,6 +70,12 @@ if [ $1 -eq 1 ]; then
     systemctl enable pdm-wba-init.service >/dev/null 2>&1 || :
     # Mark that reboot is required
     touch /run/reboot-required
+    # Apply sys users immediately
+    systemd-sysusers >/dev/null 2>&1 || :
+    # Reload systemd to apply unit override changes
+    systemctl daemon-reload >/dev/null 2>&1 || :
+    # Apply tmp files
+    systemd-tmpfiles --create >/dev/null 2>&1 || :
 fi
 
 %postun
@@ -91,5 +96,5 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
-* Mon Sep 22 2025 PDM WBA Packager - 1.0.7
+* Mon Sep 22 2025 PDM WBA Packager - 1.0.8
 - Initial package
