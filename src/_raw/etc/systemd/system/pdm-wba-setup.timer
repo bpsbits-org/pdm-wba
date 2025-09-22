@@ -1,0 +1,10 @@
+[Unit]
+Description=One-time PDM-WBA setup timer
+After=network.target
+
+[Timer]
+OnBootSec=30
+Persistent=false
+
+[Install]
+WantedBy=multi-user.target

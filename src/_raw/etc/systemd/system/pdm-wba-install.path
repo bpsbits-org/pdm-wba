@@ -1,0 +1,9 @@
+[Unit]
+Description=Monitor fro WA install requests
+
+[Path]
+PathChanged=/home/wa/install
+PathExists=/home/wa/install
+
+[Install]
+WantedBy=multi-user.target

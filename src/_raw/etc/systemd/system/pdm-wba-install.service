@@ -1,0 +1,15 @@
+[Unit]
+Description=Handles WA install requests
+Requires=pdm-wba-install.path
+After=pdm-wba-install.path
+
+[Service]
+Type=oneshot
+ExecStartPre=/bin/sleep 10
+ExecStart=/usr/local/bin/pdm-wba-install.sh
+RemainAfterExit=yes
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

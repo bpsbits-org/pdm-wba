@@ -1,0 +1,14 @@
+[Unit]
+Description=One-time PDM-WBA setup
+Requires=pdm-wba-init.service
+After=pdm-wba-init.service
+Before=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/true
+ExecStartPost=/bin/systemctl start pdm-wba-init.service
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

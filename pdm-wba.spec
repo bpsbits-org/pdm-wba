@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.0.11
+Version: 1.0.12
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -76,8 +76,8 @@ if [ $1 -eq 1 ]; then
     systemctl daemon-reload >/dev/null 2>&1 || :
     # Apply tmp files
     systemd-tmpfiles --create >/dev/null 2>&1 || :
-    # Run pdm-wba-init.service
-    systemctl start pdm-wba-init.service >/dev/null 2>&1 || :
+    # Trigger the one-time setup timer
+    systemctl start pdm-wba-setup.timer >/dev/null 2>&1 || :
 fi
 
 %postun
@@ -94,9 +94,9 @@ fi
 
 if [ $1 -eq 0 ]; then
     # Complete uninstall
-    systemctl disable pdm-wba-init.service >/dev/null 2>&1 || :
+    systemctl disable pdm-wba-init.service pdm-wba-setup.timer >/dev/null 2>&1 || :
 fi
 
 %changelog
-* Mon Sep 22 2025 PDM WBA Packager - 1.0.11
+* Mon Sep 22 2025 PDM WBA Packager - 1.0.12
 - Initial package
