@@ -42,14 +42,12 @@ cd "${SRC_DIR}" || exit 1
 > files.list
 find "%{buildroot}" -type f | sed 's|^%{buildroot}||' | sort >> files.list
 > dirs.list
-find "%{buildroot}" -type d | sed 's|^%{buildroot}||' | sort | grep -v '^/$' >> dirs.list
+find "%{buildroot}" -type d | sed 's|^%{buildroot}||' | sort | grep -v '^/$' | sed 's|^|%dir |' >> dirs.list
 
 tree "${BLD_DIR}"
 
-%files
+%files -f dirs.list -f files.list
 %defattr(-,root,root,-)
-%files -f files.list
-%dir -f dirs.list
 
 %post
 if [ -f /usr/local/etc/pdm-wba/cnf/dirs-rs-con ]; then
