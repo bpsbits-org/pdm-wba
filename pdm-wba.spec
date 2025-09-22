@@ -16,31 +16,32 @@ ls -lha
 
 %build
 # No build needed
-echo "install directory structure:"
+echo "build directory structure:"
 pwd
 ls -lha
 
 %install
-# Debug information to help understand the build environment
-echo "install directory structure:"
-pwd
-find . -type d | grep -v "^\.$" | sort
+# Copy source files from workspace using proper macro
+cp -r %{_topdir}/SOURCES/* ./
 
 # Create tmp dir in buildroot
 mkdir -p %{buildroot}/tmp
 
-echo "Find and add files"
+echo "build directory structure:"
+pwd
+ls -lha
+
 # Generate list of directories for restorecon
-find . -path "./src/_raw/*" -type d | sed 's|^./src/_raw/||' > %{buildroot}/tmp/pdm-wba-restorecon-dirs
+find src/_raw -type d | sed 's|^src/_raw/||' > %{buildroot}/tmp/pdm-wba-restorecon-dirs
 
 # 1. Directories → 755
-find . -path "./src/_raw/*" -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
+find src/_raw -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#src/_raw/}"' _ {} \;
 
 # 2. Shell scripts → 755
-find . -path "./src/_raw/*" -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
+find src/_raw -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "%{buildroot}/${1#src/_raw/}"' _ {} \;
 
 # 3. All other files → 644
-find . -path "./src/_raw/*" -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
+find src/_raw -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#src/_raw/}"' _ {} \;
 
 %files
 %defattr(-,root,root,-)
