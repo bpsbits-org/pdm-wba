@@ -18,6 +18,9 @@ echo "build directory structure:"
 ls -lha
 
 %install
+
+tree .
+
 # Create tmp dir in buildroot
 mkdir -p %{buildroot}/tmp
 
