@@ -18,9 +18,9 @@ echo "prep directory structure:"
 
 %install
 tree .
-BLD_DIR=%{buildroot}
 SRC_DIR=$(realpath .)
 WBA_DIR="${SRC_DIR}/pdm-wba-main/src/_raw"
+BLD_DIR=%{buildroot}
 
 echo "Source directory: ${SRC_DIR}"
 echo "Build directory: ${BLD_DIR}"
@@ -30,18 +30,18 @@ tree "${WBA_DIR}"
 
 # Generate list of directories for restorecon
 # /usr/local/etc/pdm-wba/cnf/dirs-rs-con
-find "${WBA_DIR}/" -type d | sed 's|^./src/_raw/||' > "${BLD_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
+find "${WBA_DIR}/" -type d | sed 's|^./src/_raw/||' > "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
 
-cat "${BLD_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
+cat "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
 
 # 1. Directories → 755
-find "${WBA_DIR}/" -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
+find "${WBA_DIR}/" -type d -exec sh -c 'install -dm755 "$1" "${BLD_DIR}/${1#./src/_raw/}"' _ {} \;
 # 2. Shell scripts → 755
-find "${WBA_DIR}/" -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
+find "${WBA_DIR}/" -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "${BLD_DIR}/${1#./src/_raw/}"' _ {} \;
 # 3. All other files → 644
-find "${WBA_DIR}/" -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
+find "${WBA_DIR}/" -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "${BLD_DIR}/${1#./src/_raw/}"' _ {} \;
 
-tree .
+tree "${BLD_DIR}"
 
 %files
 %defattr(-,root,root,-)
