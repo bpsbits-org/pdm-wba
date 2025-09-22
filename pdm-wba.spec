@@ -41,8 +41,10 @@ cd "${SRC_DIR}" || exit 1
 # Generate dynamic files list for RPM packaging
 > files.list
 find "%{buildroot}" -type f | sed 's|^%{buildroot}||' | sort >> files.list
+
 > dirs.list
-find "%{buildroot}" -type d | sed 's|^%{buildroot}||' | sort | grep -v '^/$' | grep -v '^/[^/]*$' | sed 's|^|%dir |' >> dirs.list
+# Generate dynamic dirs list for RPM packaging
+find "%{buildroot}" -type f | sed 's|/[^/]*$||' | sed 's|^%{buildroot}||' | sort -u | grep -v '^/$' | grep -v '^/[^/]*$' | sed 's|^|%dir |' >> dirs.list
 
 tree "${BLD_DIR}"
 
