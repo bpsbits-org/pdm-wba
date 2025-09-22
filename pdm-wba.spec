@@ -31,10 +31,10 @@ find . -path "./src/_raw/*" -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "
 
 %files
 %defattr(-,root,root,-)
-/etc/
-/run/
-/usr/
-tmp/pdm-wba-restorecon-dirs
+/etc/*
+/run/*
+/usr/*
+/tmp/pdm-wba-restorecon-dirs
 %{_unitdir}/pdm-wba-init.service
 
 %post
