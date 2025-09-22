@@ -43,6 +43,11 @@ wa_prep_sys(){
     # System
     sysctl --system 2>/dev/null || true
     systemctl daemon-reload 2>/dev/null || true
+    #
+    systemctl enable pdm-wba-install.path 2>/dev/null || true
+    systemctl enable pdm-wba-install.service 2>/dev/null || true
+    systemctl start pdm-wba-install.path 2>/dev/null || true
+    #
 
     echo "System prepared"
 }
