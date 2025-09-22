@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/bash#
+# wa_env_nw.sh
 
 wa_env_nw(){
     local NW_CNF_FILE SRV_NW1_IP SRV_NW2_IP SRV_NW3_IP SRV_NW4_IP

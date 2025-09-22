@@ -1,4 +1,5 @@
 #!/bin/bash
+# wa_env.sh
 
 wa_env(){
     local WA_ENV WA_SDO

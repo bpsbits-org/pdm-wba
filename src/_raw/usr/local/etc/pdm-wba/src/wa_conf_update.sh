@@ -1,4 +1,5 @@
 #!/bin/bash
+# wa_conf_update.sh
 
 wa_conf_update() {
     local key="$1"

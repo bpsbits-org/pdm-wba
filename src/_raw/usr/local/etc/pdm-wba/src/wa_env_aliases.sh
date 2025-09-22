@@ -1,4 +1,5 @@
 #!/bin/bash
+# wa_env_aliases.sh
 
 wa_env_aliases(){
     alias cat-nw='cat "/etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection"'
