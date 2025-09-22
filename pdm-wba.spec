@@ -42,6 +42,9 @@ tree "${BLD_DIR}"
 
 %files
 %defattr(-,root,root,-)
+/etc
+/run
+/usr
 
 %post
 if [ -f /usr/local/etc/pdm-wba/cnf/dirs-rs-con ]; then
