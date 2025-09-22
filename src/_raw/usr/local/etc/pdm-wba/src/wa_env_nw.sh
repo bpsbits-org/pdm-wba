@@ -1,4 +1,4 @@
-#!/bin/bash#
+#!/bin/bash
 # wa_env_nw.sh
 
 wa_env_nw(){

@@ -11,4 +11,5 @@ wa_env_aliases(){
     alias st-firewall='systemctl status firewalld --no-pager'
     alias st-podman='systemctl status podman --no-pager'
     alias st-user='systemctl status user@5100 --no-pager'
+    alias log-wa-init='journalctl -u pdm-wba-init.service --no-pager'
 }
