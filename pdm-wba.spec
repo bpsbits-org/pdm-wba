@@ -8,58 +8,49 @@ License: GPL-3.0-or-later
 Podman based Web Application Server
 
 %prep
-# No prep needed
+%setup -q -T -D
 
 %build
 # No build needed
 
 %install
-pushd src/_raw || exit 1
-
-# Generate list of directories for restorecon (same logic)
-find . -type d > %{buildroot}/tmp/pdm-wba-restorecon-dirs
+# Generate list of directories for restorecon
+find src/_raw -type d | sed 's|src/_raw/||' > %{buildroot}/tmp/%{name}-restorecon-dirs
 
 # 1. Directories → 755
-find . -type d -exec install -dm755 {} %{buildroot}/{} \;
+find src/_raw -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#src/_raw/}"' _ {} \;
 
-# 2. Shell scripts → 755 (executable)
-find . -name "*.sh" -type f -exec install -Dm755 {} %{buildroot}/{} \;
+# 2. Shell scripts → 755
+find src/_raw -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "%{buildroot}/${1#src/_raw/}"' _ {} \;
 
 # 3. All other files → 644
-find . -type f ! -name "*.sh" -exec install -Dm644 {} %{buildroot}/{} \;
-
-popd || exit 1
+find src/_raw -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#src/_raw/}"' _ {} \;
 
 %files
 %defattr(-,root,root,-)
 /etc/
 /run/
 /usr/
-tmp/pdm-wba-restorecon-dirs
+tmp/%{name}-restorecon-dirs
 %{_unitdir}/pdm-wba-init.service
 
 %post
-# Use the generated list (same find logic, but on target system)
-if [ -f /tmp/pdm-wba-restorecon-dirs ]; then
-    sed "s|^\./||" /tmp/pdm-wba-restorecon-dirs | while read -r dir; do
+if [ -f /tmp/%{name}-restorecon-dirs ]; then
+    cat /tmp/%{name}-restorecon-dirs | while read -r dir; do
         [ -n "$dir" ] && [ -e "/$dir" ] && restorecon -Rv "/$dir" 2>/dev/null || :
     done
-    rm -f /tmp/pdm-wba-restorecon-dirs
+    rm -f /tmp/%{name}-restorecon-dirs
 fi
 
-# Enable service automatically
 %systemd_post pdm-wba-init.service
 
 %postun
 if [ $1 -eq 0 ]; then
-    # Same logic for cleanup
-    if [ -f /tmp/pdm-wba-restorecon-dirs ]; then
-        sed "s|^\./||" /tmp/pdm-wba-restorecon-dirs | while read -r dir; do
+    if [ -f /tmp/%{name}-restorecon-dirs ]; then
+        cat /tmp/%{name}-restorecon-dirs | while read -r dir; do
             [ -n "$dir" ] && [ -e "/$dir" ] && restorecon -Rv "/$dir" 2>/dev/null || :
         done
-        rm -f /tmp/pdm-wba-restorecon-dirs
     fi
 fi
 
-# Disable service on uninstall
 %systemd_postun pdm-wba-init.service
