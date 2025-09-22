@@ -1,8 +1,9 @@
 Name: pdm-wba
-Version: 1.0.3
+Version: 1.0.4
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
+BuildRequires: systemd-rpm-macros
 
 %description
 Podman based Web Application Server
@@ -35,7 +36,6 @@ find . -path "./src/_raw/*" -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "
 /run/*
 /usr/*
 /tmp/pdm-wba-restorecon-dirs
-%{_unitdir}/pdm-wba-init.service
 
 %post
 if [ -f /tmp/pdm-wba-restorecon-dirs ]; then
