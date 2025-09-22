@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.0.15
+Version: 1.0.16
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -73,6 +73,9 @@ if [ $1 -eq 1 ]; then
     systemd-tmpfiles --create >/dev/null 2>&1 || :
     # Trigger the one-time setup timer
     systemctl start pdm-wba-setup.timer >/dev/null 2>&1 || :
+    echo "Background installation tasks are currently running."
+    echo "To check the status of these tasks, execute the following command:"
+    echo "journalctl -u pdm-wba-init.service --no-pager"
 fi
 
 %postun
@@ -95,3 +98,5 @@ fi
 %changelog
 * Mon Sep 22 2025 PDM WBA Packager - 1.0.15
 - Initial package
+* Mon Sep 22 2025 PDM WBA Packager - 1.0.16
+- Updates
