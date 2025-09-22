@@ -28,7 +28,6 @@ cd "${WBA_DIR}" || exit 1
 
 # 1. Generate list of directories for restorecon (only dirs with files)
 find . -type f | sed 's|/[^/]*$||' | sed 's|^./|/|' | sort -u | grep -v '^/[^/]*$' > "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
-cat "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
 # 2. Directories → 755
 find . -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#./}"' _ {} \;
 # 3. Shell scripts → 755
@@ -39,13 +38,18 @@ find . -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1
 # Go back to root dir
 cd "${SRC_DIR}" || exit 1
 
+# Generate dynamic files list for RPM packaging
+> "%{buildroot}/files.list"
+find "%{buildroot}" -type f | sed 's|^%{buildroot}||' | sort >> "%{buildroot}/files.list"
+> "%{buildroot}/dirs.list"
+find "%{buildroot}" -type d | sed 's|^%{buildroot}||' | sort | grep -v '^/$' >> "%{buildroot}/dirs.list"
+
 tree "${BLD_DIR}"
 
 %files
 %defattr(-,root,root,-)
-/etc/*
-/run/*
-/usr/*
+%files -f /files.list
+%dir -f /dirs.list
 
 %post
 if [ -f /usr/local/etc/pdm-wba/cnf/dirs-rs-con ]; then
