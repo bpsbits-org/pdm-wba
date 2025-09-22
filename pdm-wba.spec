@@ -33,7 +33,7 @@ tree "${WBA_DIR}"
 cd "${WBA_DIR}" || exit 1
 
 # 1. Generate list of directories for restorecon
-find . -type d | sed 's|^./||' | grep -v '^.$' > "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
+find . -type d | sed 's|^./|/|' | grep -v '^/$' > "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
 cat "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
 # 2. Directories → 755
 find . -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#./}"' _ {} \;
