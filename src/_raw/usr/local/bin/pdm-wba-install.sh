@@ -45,8 +45,60 @@ wai_validate_vars(){
     if grep -q "<INVALID_VAR>" "$file"; then
         # File contains invalid variables, rename it
         invalid_file="${file}.invalid"
-        mv "$file" "$invalid_file"
+        mv "${file}" "${invalid_file}"
         echo "Marked '${filename}' as invalid due to invalid variables."
+    fi
+}
+
+wai_validate_quadlet(){
+    local file filename invalid_file
+    file=$1
+    filename=$(basename "${file}")
+    if [ -f "${file}" ]; then
+        if ! grep -q "\[Unit\]" "${file}" || ! grep -q "\[Install\]" "${file}"; then
+            invalid_file="${file}.invalid"
+            mv "${file}" "${invalid_file}"
+            echo "Marked ${filename} as invalid due to missing sections"
+        fi
+    fi
+}
+
+wai_validate_nw(){
+    local file filename invalid_file
+    file=$1
+    filename=$(basename "${file}")
+    if [ -f "${file}" ]; then
+        if ! grep -q "\[Network\]" "${file}" ; then
+            invalid_file="${file}.invalid"
+            mv "${file}" "${invalid_file}"
+            echo "Marked ${filename} as invalid due to missing sections"
+        fi
+    fi
+}
+
+wai_validate_vl(){
+    local file filename invalid_file
+    file=$1
+    filename=$(basename "${file}")
+    if [ -f "${file}" ]; then
+        if ! grep -q "\[Volume\]" "${file}" ; then
+            invalid_file="${file}.invalid"
+            mv "${file}" "${invalid_file}"
+            echo "Marked ${filename} as invalid due to missing sections"
+        fi
+    fi
+}
+
+wai_validate_cn(){
+    local file filename
+    file=$1
+    filename=$(basename "${file}")
+    if [ -f "${file}" ]; then
+        if ! grep -q "\[Container\]" "${file}"  || ! grep -q "\[Service\]" "${file}"; then
+            local invalid_file="${file}.invalid"
+            mv "${file}" "${invalid_file}"
+            echo "Marked ${filename} as invalid due to missing sections"
+        fi
     fi
 }
 
@@ -56,42 +108,55 @@ wai_prepare_file(){
     wai_fix_owner "${file}"
     wai_update_vars "${file}"
     wai_validate_vars "${file}"
+    wai_validate_quadlet "${file}"
+}
+
+wai_install_service(){
+    local file filename dest_file
+    file=$1
+    filename=$(basename "${file}")
+    dest_file="/home/wa/.config/containers/systemd/${filename}"
+    if [ -f "${file}" ]; then
+        mv "${file}" "${dest_file}"
+        wai_fix_owner "${dest_file}"
+        # Run systemctl commands
+        XDG_RUNTIME_DIR=/run/user/5100 systemctl --user daemon-reload
+        sleep 2
+        XDG_RUNTIME_DIR=/run/user/5100 systemctl --user start "${filename}" --no-pager
+        sleep 2
+        XDG_RUNTIME_DIR=/run/user/5100 systemctl --user status "${filename}" --no-pager
+        echo "Installed ${filename}"
+    fi
 }
 
 wai_nw(){
     local file filename
     file=$1
     filename=$(basename "${file}")
-    echo "Handling network file: ${filename}"
+    echo "Handling network: ${filename}"
     wai_prepare_file "${file}"
-    if [ -f "${file}" ]; then
-        mv "${file}" "/home/wa/${filename}"
-        echo "Installed ${filename}"
-    fi
+    wai_validate_nw "${file}"
+    wai_install_service "${file}"
 }
 
 wai_vl(){
     local file filename
     file=$1
     filename=$(basename "${file}")
-    echo "Handling volume file: ${filename}"
+    echo "Handling volume: ${filename}"
     wai_prepare_file "${file}"
-    if [ -f "${file}" ]; then
-        mv "${file}" "/home/wa/${filename}"
-        echo "Installed ${filename}"
-    fi
+    wai_validate_vl "${file}"
+    wai_install_service "${file}"
 }
 
 wai_cn(){
     local file filename
     file=$1
     filename=$(basename "${file}")
-    echo "Handling container file: ${filename}"
+    echo "Handling container: ${filename}"
     wai_prepare_file "${file}"
-    if [ -f "${file}" ]; then
-        mv "${file}" "/home/wa/${filename}"
-        echo "Installed ${filename}"
-    fi
+    wai_validate_cn "${file}"
+    wai_install_service "${file}"
 }
 
 handle_wa_quadlet() {
