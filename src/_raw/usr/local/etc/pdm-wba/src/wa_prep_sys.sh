@@ -2,7 +2,7 @@
 
 wa_prep_sys(){
     echo "Adjusting system..."
-    systemctl preset firewalld.service cockpit.socket pmcd.service pmlogger.service user@5009.service
+    systemctl preset firewalld.service cockpit.socket pmcd.service pmlogger.service user@5100.service
     firewall-cmd --permanent --remove-service=ssh
     firewall-cmd --permanent --zone=public --add-service=wa
     firewall-cmd --reload
