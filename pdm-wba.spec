@@ -9,7 +9,7 @@ BuildRequires: systemd-rpm-macros
 Podman based Web Application Server
 
 %prep
-# No prep needed
+%autosetup -n %{name}-%{version}
 echo "prep directory structure:"
 pwd
 ls -lha
