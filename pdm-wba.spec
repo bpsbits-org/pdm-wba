@@ -28,23 +28,24 @@ echo "WBA directory: ${WBA_DIR}"
 
 tree "${WBA_DIR}"
 
+cd "${WBA_DIR}" || exit 1
+
 # 1. Generate list of directories for restorecon
-(cd "${WBA_DIR}" && find . -mindepth 1 -type d | cut -c2-) > "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
+find "${WBA_DIR}/" -type d | sed 's|^./||' > "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
 cat "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
 # 2. Directories → 755
-(cd "${WBA_DIR}" && find . -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#./}"' _ {} \;)
+find "${WBA_DIR}/" -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#./}"' _ {} \;
 # 3. Shell scripts → 755
-(cd "${WBA_DIR}" && find . -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "%{buildroot}/${1#./}"' _ {} \;)
+find "${WBA_DIR}/" -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "%{buildroot}/${1#./}"' _ {} \;
 # 4. All other files → 644
-(cd "${WBA_DIR}" && find . -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#./}"' _ {} \;)
+find "${WBA_DIR}/" -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#./}"' _ {} \;
 
 tree "${BLD_DIR}"
 
+cd "${SRC_DIR}" ||ecit 1
+
 %files
 %defattr(-,root,root,-)
-/etc
-/run
-/usr
 
 %post
 if [ -f /usr/local/etc/pdm-wba/cnf/dirs-rs-con ]; then
