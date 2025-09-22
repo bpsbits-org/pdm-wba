@@ -18,6 +18,12 @@ Podman based Web Application Server
 # Create tmp dir in buildroot
 mkdir -p %{buildroot}/tmp
 
+# Debug information to help understand the build environment
+echo "Current directory structure:"
+pwd
+find . -type d | grep -v "^\.$" | sort
+
+
 # Generate list of directories for restorecon
 find . -path "./src/_raw/*" -type d | sed 's|^./src/_raw/||' > %{buildroot}/tmp/pdm-wba-restorecon-dirs
 
