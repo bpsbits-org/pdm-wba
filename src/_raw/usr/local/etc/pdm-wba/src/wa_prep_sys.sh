@@ -1,56 +1,37 @@
 #!/bin/bash
 # wa_prep_sys.sh
 
+wait_for_tools() {
+    local timeout=10
+    local count=0
+    while [ $count -lt $timeout ]; do
+        command -v firewall-cmd >/dev/null 2>&1 && command -v semanage >/dev/null 2>&1 && return 0
+        sleep 3
+        count=$((count + 1))
+        echo "Waiting when tools are available..."
+    done
+}
+
 wa_prep_sys(){
     echo "Adjusting system..."
 
-    # Preset services if systemctl available
-    if command -v systemctl >/dev/null 2>&1; then
-        if systemctl preset firewalld.service cockpit.socket pmcd.service pmlogger.service user@5100.service 2>/dev/null; then
-            echo "Services preset successfully"
-        else
-            echo "Warning: Failed to preset some services"
-        fi
-    else
-        echo "Warning: systemctl not available - skipping service preset"
-    fi
+    # Wait for essential tools (max 10 seconds)
+    wait_for_tools
 
-    # Firewall rules if firewalld available
-    if command -v firewall-cmd >/dev/null 2>&1; then
-        if firewall-cmd --permanent --remove-service=ssh 2>/dev/null && \
-           firewall-cmd --permanent --zone=public --add-service=wa 2>/dev/null && \
-           firewall-cmd --reload 2>/dev/null; then
-            echo "Firewall rules applied successfully"
-        else
-            echo "Warning: Failed to apply firewall rules"
-        fi
-    else
-        echo "Warning: firewalld not available - skipping firewall rules"
-    fi
+    # Services
+    systemctl preset firewalld.service cockpit.socket pmcd.service pmlogger.service user@5100.service 2>/dev/null || true
 
-    # SELinux rules if semanage available
-    if command -v semanage >/dev/null 2>&1; then
-        if semanage import -f /etc/selinux/local/port-config.semanage 2>/dev/null; then
-            echo "SELinux rules applied successfully"
-        else
-            echo "Warning: Failed to apply SELinux rules"
-        fi
-    else
-        echo "Warning: semanage not available - skipping SELinux rules"
-    fi
+    # Firewall
+    firewall-cmd --permanent --remove-service=ssh 2>/dev/null || true
+    firewall-cmd --permanent --zone=public --add-service=wa 2>/dev/null || true
+    firewall-cmd --reload 2>/dev/null || true
 
-    # System config
-    if sysctl --system 2>/dev/null; then
-        echo "System configuration applied"
-    else
-        echo "Warning: Failed to apply system configuration"
-    fi
+    # SELinux
+    semanage import -f /etc/selinux/local/port-config.semanage 2>/dev/null || true
 
-    if command -v systemctl >/dev/null 2>&1 && systemctl daemon-reload 2>/dev/null; then
-        echo "System daemon reloaded"
-    else
-        echo "Warning: Failed to reload systemd daemon"
-    fi
+    # System
+    sysctl --system 2>/dev/null || true
+    systemctl daemon-reload 2>/dev/null || true
 
     echo "System prepared"
 }
