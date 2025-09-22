@@ -1,0 +1,14 @@
+[Unit]
+Description=Initialises PDM-WBA in the target system
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/pdm-wba-init.sh
+RemainAfterExit=true
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
