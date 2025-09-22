@@ -18,8 +18,13 @@ tree .
 # No build needed
 
 %install
+BLD_DIR=%{buildroot}
+SRC_DIR=$(realpath .)
+echo "Source directory: ${SRC_DIR}"
+echo "Build directory: ${BLD_DIR}"
 
-tree .
+tree "${SRC_DIR}"
+tree "${BLD_DIR}"
 
 # Create tmp dir in buildroot
 mkdir -p %{buildroot}/tmp
