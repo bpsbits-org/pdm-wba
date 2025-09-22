@@ -10,49 +10,35 @@ Podman based Web Application Server
 
 %prep
 echo "prep directory structure:"
-pwd
 ls -lha
 
 %build
 # No build needed
 echo "build directory structure:"
-pwd
 ls -lha
 
 %install
-# Source directory where GitHub repo is cloned
-SRC_DIR=%{_builddir}/pdm-wba
-ls -lha "${SRC_DIR}"
-
-# Copy source files from workspace using proper macro
-cp -r %{_topdir}/SOURCES/* ./
-
 # Create tmp dir in buildroot
 mkdir -p %{buildroot}/tmp
 
-echo "install directory structure:"
-ls -lha /var/lib/copr-rpmbuild/workspace/*/%{name}/src/_raw
-pwd
 ls -lha
 
 # Generate list of directories for restorecon
-find src/_raw -type d | sed 's|^src/_raw/||' > %{buildroot}/tmp/pdm-wba-restorecon-dirs
+find . -path "./src/_raw/*" -type d | sed 's|^./src/_raw/||' > %{buildroot}/tmp/pdm-wba-restorecon-dirs
 
 # 1. Directories → 755
-find src/_raw -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#src/_raw/}"' _ {} \;
+find . -path "./src/_raw/*" -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
 
 # 2. Shell scripts → 755
-find src/_raw -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "%{buildroot}/${1#src/_raw/}"' _ {} \;
+find . -path "./src/_raw/*" -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
 
 # 3. All other files → 644
-find src/_raw -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#src/_raw/}"' _ {} \;
+find . -path "./src/_raw/*" -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
 
 %files
 %defattr(-,root,root,-)
-/etc/*
-/run/*
-/usr/*
 /tmp/pdm-wba-restorecon-dirs
+%{_unitdir}/pdm-wba-init.service
 
 %post
 if [ -f /tmp/pdm-wba-restorecon-dirs ]; then
