@@ -4,19 +4,30 @@
 wait_for_tools() {
     local timeout=10
     local count=0
+    # First check if tools are already available
+    if command -v firewall-cmd >/dev/null 2>&1 && command -v semanage >/dev/null 2>&1; then
+        return 0  # Tools are available, exit immediately
+    fi
+    # If tools aren't available yet, wait and check periodically
+    echo "Waiting for tools to become available..."
     while [ $count -lt $timeout ]; do
-        command -v firewall-cmd >/dev/null 2>&1 && command -v semanage >/dev/null 2>&1 && return 0
         sleep 3
         count=$((count + 1))
-        echo "Waiting when tools are available..."
+        if command -v firewall-cmd >/dev/null 2>&1 && command -v semanage >/dev/null 2>&1; then
+            return 0  # Tools are now available
+        fi
+        echo "Still waiting... ($count/$timeout)"
     done
+    # If we reached here, the tools were not available within the timeout
+    echo "Error: Required tools (firewall-cmd and semanage) not available after $timeout tries" >&2
+    return 1
 }
 
 wa_prep_sys(){
     echo "Adjusting system..."
 
     # Wait for essential tools (max 10 seconds)
-    wait_for_tools
+    wait_for_tools_once || echo "Warning: Required tools are not available!"
 
     # Services
     systemctl preset firewalld.service cockpit.socket pmcd.service pmlogger.service user@5100.service 2>/dev/null || true
