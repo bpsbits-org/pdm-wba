@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.0
+Version: 1.0.1
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -14,43 +14,50 @@ Podman based Web Application Server
 # No build needed
 
 %install
+pushd src/_raw || exit 1
+
 # Generate list of directories for restorecon
-find src/_raw -type d | sed 's|src/_raw/||' > %{buildroot}/tmp/%{name}-restorecon-dirs
+find . -type d > %{buildroot}/tmp/pdm-wba-restorecon-dirs
 
 # 1. Directories → 755
-find src/_raw -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#src/_raw/}"' _ {} \;
+find . -type d -exec install -dm755 {} %{buildroot}/{} \;
 
 # 2. Shell scripts → 755
-find src/_raw -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "%{buildroot}/${1#src/_raw/}"' _ {} \;
+find . -name "*.sh" -type f -exec install -Dm755 {} %{buildroot}/{} \;
 
 # 3. All other files → 644
-find src/_raw -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#src/_raw/}"' _ {} \;
+find . -type f ! -name "*.sh" -exec install -Dm644 {} %{buildroot}/{} \;
+
+popd || exit 1
 
 %files
 %defattr(-,root,root,-)
 /etc/
 /run/
 /usr/
-tmp/%{name}-restorecon-dirs
+tmp/pdm-wba-restorecon-dirs
 %{_unitdir}/pdm-wba-init.service
 
 %post
-if [ -f /tmp/%{name}-restorecon-dirs ]; then
-    cat /tmp/%{name}-restorecon-dirs | while read -r dir; do
+if [ -f /tmp/pdm-wba-restorecon-dirs ]; then
+    sed "s|^\./||" /tmp/pdm-wba-restorecon-dirs | while read -r dir; do
         [ -n "$dir" ] && [ -e "/$dir" ] && restorecon -Rv "/$dir" 2>/dev/null || :
     done
-    rm -f /tmp/%{name}-restorecon-dirs
+    rm -f /tmp/pdm-wba-restorecon-dirs
 fi
-
 %systemd_post pdm-wba-init.service
 
 %postun
 if [ $1 -eq 0 ]; then
-    if [ -f /tmp/%{name}-restorecon-dirs ]; then
-        cat /tmp/%{name}-restorecon-dirs | while read -r dir; do
+    if [ -f /tmp/pdm-wba-restorecon-dirs ]; then
+        sed "s|^\./||" /tmp/pdm-wba-restorecon-dirs | while read -r dir; do
             [ -n "$dir" ] && [ -e "/$dir" ] && restorecon -Rv "/$dir" 2>/dev/null || :
         done
     fi
 fi
-
 %systemd_postun pdm-wba-init.service
+
+
+%changelog
+* Mon Sep 22 2025 PDM WBA Packager - 1.0.1
+- Initial package
