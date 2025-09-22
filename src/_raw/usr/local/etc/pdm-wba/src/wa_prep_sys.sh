@@ -27,14 +27,14 @@ wa_prep_sys(){
     echo "Adjusting system..."
 
     # Wait for essential tools (max 10 seconds)
-    wait_for_tools_once || echo "Warning: Required tools are not available!"
+    wait_for_tools || echo "Warning: Required tools are not available!"
 
     # Services
     systemctl preset firewalld.service cockpit.socket pmcd.service pmlogger.service user@5100.service 2>/dev/null || true
 
     # Firewall
     firewall-cmd --permanent --remove-service=ssh 2>/dev/null || true
-    firewall-cmd --permanent --zone=public --add-service=wa 2>/dev/null || true
+    firewall-cmd --permanent --zone=public --add-service=pdm-wba 2>/dev/null || true
     firewall-cmd --reload 2>/dev/null || true
 
     # SELinux
