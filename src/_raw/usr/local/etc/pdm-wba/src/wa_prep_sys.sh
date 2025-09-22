@@ -26,6 +26,9 @@ wait_for_tools() {
 wa_prep_sys(){
     echo "Adjusting system..."
 
+    systemctl enable firewalld
+    systemctl start firewalld
+
     # Wait for essential tools (max 10 seconds)
     wait_for_tools || echo "Warning: Required tools are not available!"
 

@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.0.17
+Version: 1.0.18
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -101,4 +101,6 @@ fi
 * Mon Sep 22 2025 PDM WBA Packager - 1.0.16
 - Updates
 * Mon Sep 22 2025 PDM WBA Packager - 1.0.17
+- Updates
+* Mon Sep 22 2025 PDM WBA Packager - 1.0.18
 - Updates

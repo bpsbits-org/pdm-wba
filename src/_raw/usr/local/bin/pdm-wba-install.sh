@@ -3,39 +3,11 @@
 WA_INSTALL_DIR="/home/wa/install"
 DEBOUNCE_TIMEOUT=10
 
-wai_fix_owner(){
-    local file=$1
-    chown wa:wa "${file}"
-}
-
-wai_update_vars(){
-    local file escaped_value value vars temp_file
-    file=$1
-
-    temp_file=$(mktemp)
-    cp "${file}" "${temp_file}"
-
-    # Find all ${VAR} patterns in the file
-    vars=$(grep -o '\${[A-Za-z0-9_]*}' "$file" | sort -u | sed 's/\${//;s/}//')
-
-    source /etc/profile.d/wa.sh
-
-    # Process each variable
-    for var in $vars; do
-        value="${!var}"
-        if [ -z "$value" ]; then
-            value="<INVALID_VAR>"
-        fi
-        # Escape special characters for sed
-        escaped_value=$(echo "$value" | sed 's/[\/&]/\\&/g')
-        # Replace variable with its value
-        sed -i "s/\${$var}/$escaped_value/g" "$temp_file"
-    done
-
-    # Replace original file with updated version
-    mv "${temp_file}" "${file}"
-    wai_fix_owner "${file}"
-}
+source /usr/local/etc/pdm-wba/src/wai_add_timer.sh
+source /usr/local/etc/pdm-wba/src/wai_user_srv.sh
+source /usr/local/etc/pdm-wba/src/wai_fix_owner.sh
+source /usr/local/etc/pdm-wba/src/wai_install_service.sh
+source /usr/local/etc/pdm-wba/src/wai_update_vars.sh
 
 wai_validate_vars(){
     local file invalid_file filename
@@ -111,24 +83,6 @@ wai_prepare_file(){
     wai_validate_quadlet "${file}"
 }
 
-wai_install_service(){
-    local file filename dest_file
-    file=$1
-    filename=$(basename "${file}")
-    dest_file="/home/wa/.config/containers/systemd/${filename}"
-    if [ -f "${file}" ]; then
-        mv "${file}" "${dest_file}"
-        wai_fix_owner "${dest_file}"
-        # Run systemctl commands
-        XDG_RUNTIME_DIR=/run/user/5100 systemctl --user daemon-reload
-        sleep 2
-        XDG_RUNTIME_DIR=/run/user/5100 systemctl --user start "${filename}" --no-pager
-        sleep 2
-        XDG_RUNTIME_DIR=/run/user/5100 systemctl --user status "${filename}" --no-pager
-        echo "Installed ${filename}"
-    fi
-}
-
 wai_nw(){
     local file filename
     file=$1
@@ -159,7 +113,7 @@ wai_cn(){
     wai_install_service "${file}"
 }
 
-handle_wa_quadlet() {
+wai_handle_quadlet() {
     local files pattern
     pattern="$1"
     files=$(find "$WA_INSTALL_DIR" -type f -name "*$pattern" | sort)
@@ -176,14 +130,17 @@ handle_wa_quadlet() {
     fi
 }
 
-on_wa_install_request() {
-    handle_wa_quadlet ".network"
-    handle_wa_quadlet ".volume"
-    handle_wa_quadlet ".container"
+wai_on_install_request() {
+    wai_add_timer
+    wai_user_srv
+    #
+    wai_handle_quadlet ".network"
+    wai_handle_quadlet ".volume"
+    wai_handle_quadlet ".container"
 }
 
 # Wait for debounce period
 sleep "$DEBOUNCE_TIMEOUT"
 
 # Process in exact order
-on_wa_install_request
+wai_on_install_request
