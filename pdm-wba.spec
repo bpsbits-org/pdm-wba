@@ -46,6 +46,9 @@ find "%{buildroot}" -type d | sed 's|^%{buildroot}||' | sort | grep -v '^/$' | s
 
 tree "${BLD_DIR}"
 
+cat dirs.list
+cat files.list
+
 %files -f dirs.list -f files.list
 %defattr(-,root,root,-)
 
