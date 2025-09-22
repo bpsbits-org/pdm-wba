@@ -1,4 +1,5 @@
 #!/bin/bash
+# pdm-wba-init.sh
 
 mark_init_done(){
     source /usr/local/etc/pdm-wba/src/wa_conf_update.sh

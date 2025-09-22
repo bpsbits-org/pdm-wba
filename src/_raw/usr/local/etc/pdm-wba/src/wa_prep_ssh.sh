@@ -1,4 +1,5 @@
 #!/bin/bash
+# wa_prep_ssh.sh
 
 wa_prep_ssh.sh(){
     echo "Updating SSHD configuration..."

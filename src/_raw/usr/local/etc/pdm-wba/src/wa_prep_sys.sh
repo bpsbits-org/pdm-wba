@@ -1,4 +1,5 @@
 #!/bin/bash
+# wa_prep_sys.sh
 
 wa_prep_sys(){
     echo "Adjusting system..."
