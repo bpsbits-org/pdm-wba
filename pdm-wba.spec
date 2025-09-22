@@ -10,20 +10,26 @@ Podman based Web Application Server
 
 %prep
 # No prep needed
+echo "prep directory structure:"
+pwd
+ls -lha
 
 %build
 # No build needed
+echo "install directory structure:"
+pwd
+ls -lha
 
 %install
-# Create tmp dir in buildroot
-mkdir -p %{buildroot}/tmp
-
 # Debug information to help understand the build environment
-echo "Current directory structure:"
+echo "install directory structure:"
 pwd
 find . -type d | grep -v "^\.$" | sort
 
+# Create tmp dir in buildroot
+mkdir -p %{buildroot}/tmp
 
+echo "Find and add files"
 # Generate list of directories for restorecon
 find . -path "./src/_raw/*" -type d | sed 's|^./src/_raw/||' > %{buildroot}/tmp/pdm-wba-restorecon-dirs
 
