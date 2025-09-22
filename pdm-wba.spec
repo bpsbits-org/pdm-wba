@@ -35,6 +35,8 @@ find . -path "./src/_raw/*" -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1
 # 3. All other files → 644
 find . -path "./src/_raw/*" -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
 
+tree %{buildroot}
+
 %files
 %defattr(-,root,root,-)
 /tmp/pdm-wba-restorecon-dirs
