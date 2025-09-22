@@ -60,7 +60,14 @@ if [ -f /usr/local/etc/pdm-wba/cnf/dirs-rs-con ]; then
     rm -f /usr/local/etc/pdm-wba/cnf/dirs-rs-con
 fi
 
+# Enable the systemd service
 %systemd_post pdm-wba-init.service
+
+# Explicitly enable the service to start on boot
+if [ $1 -eq 1 ]; then
+    # Fresh install
+    systemctl enable pdm-wba-init.service >/dev/null 2>&1 || :
+fi
 
 %postun
 if [ $1 -eq 0 ]; then
@@ -71,7 +78,13 @@ if [ $1 -eq 0 ]; then
     fi
 fi
 
+# Handle service on uninstall
 %systemd_postun pdm-wba-init.service
+
+if [ $1 -eq 0 ]; then
+    # Complete uninstall
+    systemctl disable pdm-wba-init.service >/dev/null 2>&1 || :
+fi
 
 %changelog
 * Mon Sep 22 2025 PDM WBA Packager - 1.0.3
