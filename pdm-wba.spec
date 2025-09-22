@@ -19,21 +19,15 @@ echo "prep directory structure:"
 # No build needed
 
 %install
-tree .
 SRC_DIR=$(realpath .)
 WBA_DIR="${SRC_DIR}/pdm-wba-main/src/_raw"
 BLD_DIR=%{buildroot}
 
-echo "Source directory: ${SRC_DIR}"
-echo "Build directory: ${BLD_DIR}"
-echo "WBA directory: ${WBA_DIR}"
-
-tree "${WBA_DIR}"
-
+# Go to source dir
 cd "${WBA_DIR}" || exit 1
 
 # 1. Generate list of directories for restorecon
-find . -type d | sed 's|^./|/|' | grep -v '^/$' > "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
+find . -type d -not -name '.' | sed 's|^./|/|' | grep -v '^/$' > "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
 cat "${WBA_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
 # 2. Directories → 755
 find . -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#./}"' _ {} \;
@@ -42,6 +36,7 @@ find . -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "%{buildroot}/${1#.
 # 4. All other files → 644
 find . -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#./}"' _ {} \;
 
+# Go back to root dir
 cd "${SRC_DIR}" || exit 1
 
 tree "${BLD_DIR}"
@@ -67,6 +62,8 @@ fi
 if [ $1 -eq 1 ]; then
     # Fresh install
     systemctl enable pdm-wba-init.service >/dev/null 2>&1 || :
+    # Mark that reboot is required
+    touch /run/reboot-required
 fi
 
 %postun
