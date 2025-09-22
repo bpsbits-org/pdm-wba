@@ -18,16 +18,16 @@ Podman based Web Application Server
 mkdir -p %{buildroot}/tmp
 
 # Generate list of directories for restorecon
-find %{_sourcedir}/src/_raw -type d | sed 's|^%{_sourcedir}/src/_raw/||' > %{buildroot}/tmp/pdm-wba-restorecon-dirs
+find . -path "./src/_raw/*" -type d | sed 's|^./src/_raw/||' > %{buildroot}/tmp/pdm-wba-restorecon-dirs
 
 # 1. Directories → 755
-find %{_sourcedir}/src/_raw -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#%{_sourcedir}/src/_raw/}"' _ {} \;
+find . -path "./src/_raw/*" -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
 
 # 2. Shell scripts → 755
-find %{_sourcedir}/src/_raw -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "%{buildroot}/${1#%{_sourcedir}/src/_raw/}"' _ {} \;
+find . -path "./src/_raw/*" -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
 
 # 3. All other files → 644
-find %{_sourcedir}/src/_raw -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#%{_sourcedir}/src/_raw/}"' _ {} \;
+find . -path "./src/_raw/*" -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
 
 %files
 %defattr(-,root,root,-)
