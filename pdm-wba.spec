@@ -42,7 +42,7 @@ cd "${SRC_DIR}" || exit 1
 > files.list
 find "%{buildroot}" -type f | sed 's|^%{buildroot}||' | sort >> files.list
 > dirs.list
-find "%{buildroot}" -type d | sed 's|^%{buildroot}||' | sort | grep -v '^/$' | sed 's|^|%dir |' >> dirs.list
+find "%{buildroot}" -type d | sed 's|^%{buildroot}||' | sort | grep -v '^/$' | grep -v '^/[^/]*$' | sed 's|^|%dir |' >> dirs.list
 
 tree "${BLD_DIR}"
 
