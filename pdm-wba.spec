@@ -6,6 +6,8 @@ License: GPL-3.0-or-later
 BuildRequires: systemd-rpm-macros tree
 Source0: https://github.com/bpsbits-org/pdm-wba/archive/refs/heads/main.tar.gz
 
+%global debug_package %{nil}
+
 %description
 Podman based Web Application Server
 
