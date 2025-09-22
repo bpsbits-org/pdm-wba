@@ -12,15 +12,16 @@ Podman based Web Application Server
 %prep
 %setup -q -c
 echo "prep directory structure:"
-tree .
 
 %build
 # No build needed
 
 %install
+tree .
 BLD_DIR=%{buildroot}
 SRC_DIR=$(realpath .)
 WBA_DIR="${SRC_DIR}/pdm-wba-main/src/_raw"
+
 echo "Source directory: ${SRC_DIR}"
 echo "Build directory: ${BLD_DIR}"
 echo "WBA directory: ${WBA_DIR}"
