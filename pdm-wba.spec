@@ -10,7 +10,7 @@ Source0: https://github.com/bpsbits-org/pdm-wba/archive/refs/heads/main.tar.gz
 Podman based Web Application Server
 
 %prep
-%setup -q
+%setup -q -c
 echo "prep directory structure:"
 tree .
 
@@ -20,26 +20,29 @@ tree .
 %install
 BLD_DIR=%{buildroot}
 SRC_DIR=$(realpath .)
+WBA_DIR="${SRC_DIR}/src/_raw/"
 echo "Source directory: ${SRC_DIR}"
 echo "Build directory: ${BLD_DIR}"
+echo "WBA directory: ${WBA_DIR}"
 
 tree "${SRC_DIR}"
+tree "${WBA_DIR}"
 tree "${BLD_DIR}"
 
 # Create tmp dir in buildroot
 mkdir -p %{buildroot}/tmp
 
 # Generate list of directories for restorecon
-find . -path "./src/_raw/*" -type d | sed 's|^./src/_raw/||' > %{buildroot}/tmp/pdm-wba-restorecon-dirs
+find . -path "${WBA_DIR}/*" -type d | sed 's|^./src/_raw/||' > %{buildroot}/tmp/pdm-wba-restorecon-dirs
 
 # 1. Directories → 755
-find . -path "./src/_raw/*" -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
+find . -path "${WBA_DIR}/*" -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
 
 # 2. Shell scripts → 755
-find . -path "./src/_raw/*" -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
+find . -path "${WBA_DIR}/*" -name "*.sh" -type f -exec sh -c 'install -Dm755 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
 
 # 3. All other files → 644
-find . -path "./src/_raw/*" -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
+find . -path "${WBA_DIR}/*" -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
 
 %files
 %defattr(-,root,root,-)
