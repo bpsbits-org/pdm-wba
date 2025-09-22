@@ -2,4 +2,6 @@
 !/.idea/runConfigurations/*
 .DS_Store
 .cache/
+.tmp/
+temp/
 tmp/
