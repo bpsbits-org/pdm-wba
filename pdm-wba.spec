@@ -3,7 +3,7 @@ Version: 1.0.4
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
-BuildRequires: systemd-rpm-macros
+BuildRequires: systemd-rpm-macros tree
 
 %description
 Podman based Web Application Server
