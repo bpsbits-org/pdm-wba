@@ -4,18 +4,18 @@ Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
 BuildRequires: systemd-rpm-macros tree
+Source0: https://github.com/bpsbits-org/pdm-wba/archive/refs/heads/main.tar.gz
 
 %description
 Podman based Web Application Server
 
 %prep
+%setup -q -n pdm-wba-main
 echo "prep directory structure:"
-ls -lha
+tree .
 
 %build
 # No build needed
-echo "build directory structure:"
-ls -lha
 
 %install
 
@@ -23,8 +23,6 @@ tree .
 
 # Create tmp dir in buildroot
 mkdir -p %{buildroot}/tmp
-
-ls -lha
 
 # Generate list of directories for restorecon
 find . -path "./src/_raw/*" -type d | sed 's|^./src/_raw/||' > %{buildroot}/tmp/pdm-wba-restorecon-dirs
