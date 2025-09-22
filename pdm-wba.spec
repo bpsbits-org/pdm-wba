@@ -9,7 +9,6 @@ BuildRequires: systemd-rpm-macros
 Podman based Web Application Server
 
 %prep
-%autosetup -n %{name}-%{version}
 echo "prep directory structure:"
 pwd
 ls -lha
@@ -21,6 +20,10 @@ pwd
 ls -lha
 
 %install
+# Source directory where GitHub repo is cloned
+SRC_DIR=%{_builddir}/pdm-wba
+ls -lha "${SRC_DIR}"
+
 # Copy source files from workspace using proper macro
 cp -r %{_topdir}/SOURCES/* ./
 
