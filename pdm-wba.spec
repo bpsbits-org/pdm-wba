@@ -14,9 +14,6 @@ Podman based Web Application Server
 # No build needed
 
 %install
-# Install systemd service file
-install -Dm644 src/_raw/usr/lib/systemd/system/pdm-wba-init.service %{buildroot}%{_unitdir}/pdm-wba-init.service
-
 pushd src/_raw || exit 1
 
 # Generate list of directories for restorecon (same logic)
