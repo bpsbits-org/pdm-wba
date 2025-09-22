@@ -26,9 +26,13 @@ echo "Source directory: ${SRC_DIR}"
 echo "Build directory: ${BLD_DIR}"
 echo "WBA directory: ${WBA_DIR}"
 
+tree "${WBA_DIR}"
+
 # Generate list of directories for restorecon
 # /usr/local/etc/pdm-wba/cnf/dirs-rs-con
-find "${WBA_DIR}/*" -type d | sed 's|^./src/_raw/||' > "%{buildroot}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
+find "${WBA_DIR}/*" -type d | sed 's|^./src/_raw/||' > "${BLD_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
+
+cat "${BLD_DIR}/usr/local/etc/pdm-wba/cnf/dirs-rs-con"
 
 # 1. Directories → 755
 find "${WBA_DIR}/*" -type d -exec sh -c 'install -dm755 "$1" "%{buildroot}/${1#./src/_raw/}"' _ {} \;
