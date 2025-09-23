@@ -2,8 +2,8 @@
 # wa_env_aliases.sh
 
 wa_env_aliases(){
-    alias nw-cat='cat "/etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection"'
-    alias nw-nano='nano "/etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection"'
+    alias nw-cat='sudo cat "/etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection"'
+    alias nw-nano='sudo nano "/etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection"'
     alias pm-update='podman auto-update'
     alias print-env='echo "WA_ENV=$WA_ENV"'
     alias print-nw='echo -e "WA_NW1=$WA_NW1\WA_NW2=$WA_NW2"'
@@ -12,6 +12,8 @@ wa_env_aliases(){
     alias st-podman='systemctl --machine="5100@.host" --user status podman --no-pager'
     alias st-user='systemctl status user@5100 --no-pager'
     alias wa-log-init='journalctl -u pdm-wba-init.service --no-pager'
+    alias wa-podman-ps='sudo -u "#5100" -i bash -c "XDG_RUNTIME_DIR=/run/user/5100 podman ps -a"'
+    alias wa-update='sudo dnf update --refresh pdm-wba'
     alias wai-log='journalctl -u pdm-wba-install.service --no-pager'
     alias wai-reload='systemctl --machine="5100@.host" --user daemon-reload'
     alias wai-reset='systemctl --machine="5100@.host" --user reset-failed'

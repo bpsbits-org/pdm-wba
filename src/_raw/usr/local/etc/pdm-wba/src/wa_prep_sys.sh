@@ -26,6 +26,12 @@ wait_for_tools() {
 wa_prep_sys(){
     echo "Adjusting system..."
 
+    mkdir -p /var/lib/systemd/linger
+    touch /var/lib/systemd/linger/wa
+    chown root:root /var/lib/systemd/linger/wa
+    chmod 0644 /var/lib/systemd/linger/wa
+    chown -r wa:wa /home/wa
+
     systemctl enable firewalld
     systemctl start firewalld
 
