@@ -22,7 +22,7 @@ init_new_system(){
 
 check_and_run() {
     local IS_INIT_DONE
-    source /run/pdm-wba/wa.conf
+    source /var/lib/pdm-wba/wa.conf
     if [ -z "$WA_SDO" ] || [ "${WA_SDO,,}" = "false" ]; then
         IS_INIT_DONE=false
     else

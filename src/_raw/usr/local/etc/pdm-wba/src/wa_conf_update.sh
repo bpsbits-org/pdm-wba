@@ -5,7 +5,7 @@ wa_conf_update() {
     local key value conf_file
     key="$1"
     value="$2"
-    conf_file="/run/pdm-wba/wa.conf"
+    conf_file="/var/lib/pdm-wba/wa.conf"
     # Check if both key and value are provided
     if [ $# -ne 2 ]; then
         echo "Error: Usage: wa_conf_update <key> <value>" >&2
