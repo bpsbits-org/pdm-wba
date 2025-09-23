@@ -26,37 +26,44 @@ wait_for_tools() {
 wa_prep_sys(){
     echo "Adjusting system..."
 
+    # Wait for essential tools (max 10 seconds)
+    wait_for_tools || echo "Warning: Required tools are not available!"
+
+    # Enable linger for wa
+    echo "Enabling linger for wa..."
     mkdir -p /var/lib/systemd/linger
     touch /var/lib/systemd/linger/wa
     chown root:root /var/lib/systemd/linger/wa
     chmod 0644 /var/lib/systemd/linger/wa
-    chown -r wa:wa /home/wa
+    chown -R wa:wa /home/wa
+    systemctl restart systemd-logind
+    systemctl --machine="5100@.host" --user enable systemd-tmpfiles-setup.service
+    systemctl --machine="5100@.host" --user start systemd-tmpfiles-setup.service
 
+    # Enable Firewall
     systemctl enable firewalld
     systemctl start firewalld
 
-    # Wait for essential tools (max 10 seconds)
-    wait_for_tools || echo "Warning: Required tools are not available!"
-
-    # Services
+    # Import presets
     systemctl preset firewalld.service cockpit.socket pmcd.service pmlogger.service user@5100.service 2>/dev/null || true
 
-    # Firewall
+    # Update Firewall
     firewall-cmd --permanent --remove-service=ssh 2>/dev/null || true
     firewall-cmd --permanent --zone=public --add-service=pdm-wba 2>/dev/null || true
     firewall-cmd --reload 2>/dev/null || true
 
-    # SELinux
+    # Update SELinux
     semanage import -f /etc/selinux/local/port-config.semanage 2>/dev/null || true
 
-    # System
+    # Update System
     sysctl --system 2>/dev/null || true
     systemctl daemon-reload 2>/dev/null || true
-    #
+
+    # Enable WA Install Monitor
     systemctl enable pdm-wba-install.path 2>/dev/null || true
     systemctl enable pdm-wba-install.service 2>/dev/null || true
     systemctl start pdm-wba-install.path 2>/dev/null || true
-    #
 
+    #
     echo "System prepared"
 }
