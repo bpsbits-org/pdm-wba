@@ -2,7 +2,9 @@
 Description=Monitor for WA install requests
 
 [Path]
+DirectoryNotEmpty=/home/wa/install
 PathChanged=/home/wa/install
+PathExists=/home/wa/install
 Unit=pdm-wba-install.service
 
 [Install]
