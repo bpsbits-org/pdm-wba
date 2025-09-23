@@ -1,24 +1,15 @@
 #!/bin/bash
 # wa_env_nw.sh
 
-wa_env_nw(){
-    local NW_CNF_FILE SRV_NW1_IP SRV_NW2_IP SRV_NW3_IP SRV_NW4_IP
-    NW_CNF_FILE="/etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection"
-    #
-    SRV_NW1_IP=$(grep "^address1=" "${NW_CNF_FILE}" | cut -d'=' -f2 | grep -o '^[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
-    SRV_NW1_IP=$(echo "${SRV_NW1_IP}" | xargs)
-    #
-    SRV_NW2_IP=$(grep "^address2=" "${NW_CNF_FILE}" | cut -d'=' -f2 | grep -o '^[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
-    SRV_NW2_IP=$(echo "${SRV_NW2_IP}" | xargs)
-    #
-    SRV_NW3_IP=$(grep "^address3=" "${NW_CNF_FILE}" | cut -d'=' -f2 | grep -o '^[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
-    SRV_NW3_IP=$(echo "${SRV_NW3_IP}" | xargs)
-    #
-    SRV_NW4_IP=$(grep "^address4=" "${NW_CNF_FILE}" | cut -d'=' -f2 | grep -o '^[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
-    SRV_NW4_IP=$(echo "${SRV_NW4_IP}" | xargs)
-    #
-    export WA_NW1="${SRV_NW1_IP}"
-    export WA_NW2="${SRV_NW2_IP}"
-    export WA_NW3="${SRV_NW3_IP}"
-    export WA_NW4="${SRV_NW4_IP}"
+wa_env_nw() {
+    local NW_CNF SRV_NW1_IP SRV_NW2_IP SRV_NW3_IP SRV_NW4_IP
+    NW_CNF=$(nmcli -t -f IP4.ADDRESS connection show "cloud-init eth0")
+    SRV_NW1_IP=$(echo "$NW_CNF" | grep "IP4.ADDRESS\[1\]" | cut -d':' -f2 | cut -d'/' -f1)
+    SRV_NW2_IP=$(echo "$NW_CNF" | grep "IP4.ADDRESS\[2\]" | cut -d':' -f2 | cut -d'/' -f1)
+    SRV_NW3_IP=$(echo "$NW_CNF" | grep "IP4.ADDRESS\[3\]" | cut -d':' -f2 | cut -d'/' -f1)
+    SRV_NW4_IP=$(echo "$NW_CNF" | grep "IP4.ADDRESS\[4\]" | cut -d':' -f2 | cut -d'/' -f1)
+    export WA_NW1="$SRV_NW1_IP"
+    export WA_NW2="$SRV_NW2_IP"
+    export WA_NW3="$SRV_NW3_IP"
+    export WA_NW4="$SRV_NW4_IP"
 }
