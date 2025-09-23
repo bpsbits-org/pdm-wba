@@ -7,6 +7,11 @@ wai_install_service(){
     filename=$(basename "${file}")
     dest_file="/home/wa/.config/containers/systemd/${filename}"
     extension="${filename##*.}"
+    if [ "${extension}" == "container" ]; then
+        extension=""
+    else
+        extension="-${extension}"
+    fi
     # "${NW_NAME}-network.service"
     if [ -f "${file}" ]; then
         mv "${file}" "${dest_file}"
@@ -14,9 +19,9 @@ wai_install_service(){
         # Run systemctl commands
         systemctl --machine="5100@.host" --user daemon-reload
         sleep 2
-        systemctl --machine="5100@.host" --user start "${filename}-${extension}.service" --no-pager
+        systemctl --machine="5100@.host" --user start "${filename}${extension}.service" --no-pager
         sleep 2
-        systemctl --machine="5100@.host" --user status "${filename}-${extension}.service" --no-pager
+        systemctl --machine="5100@.host" --user status "${filename}${extension}.service" --no-pager
         echo "Installed ${filename}"
     fi
 }
