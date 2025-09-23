@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.0.21
+Version: 1.0.22
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -74,6 +74,9 @@ if [ $1 -eq 1 ]; then
     # Trigger the one-time setup timer
     systemctl start pdm-wba-setup.timer >/dev/null 2>&1 || :
     echo 'Background installation tasks are currently running.'
+    echo 'Please wait until these tasks are completed!'
+    echo 'SSH port will be changed to 1022 and current terminal session will be dropped during updates.'
+    echo 'Reconnect and run "wa-log-init" to check status.'
 fi
 
 %postun

@@ -35,6 +35,7 @@ wa_prep_sys(){
     touch /var/lib/systemd/linger/wa
     chown root:root /var/lib/systemd/linger/wa
     chmod 0644 /var/lib/systemd/linger/wa
+    echo 'export XDG_RUNTIME_DIR=/run/user/5100' >> /home/wa/.bashrc
     chown -R wa:wa /home/wa
     systemctl restart systemd-logind
     systemctl --machine="5100@.host" --user enable systemd-tmpfiles-setup.service
@@ -58,6 +59,10 @@ wa_prep_sys(){
     # Update System
     sysctl --system 2>/dev/null || true
     systemctl daemon-reload 2>/dev/null || true
+
+    # Start podman
+    systemctl --machine="5100@.host" --user enable podman.socket
+    systemctl --machine="5100@.host" --user start podman.socket
 
     # Enable WA Install Monitor
     systemctl enable pdm-wba-install.path 2>/dev/null || true
