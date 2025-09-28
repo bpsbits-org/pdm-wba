@@ -6,6 +6,7 @@ wa_env_aliases(){
     alias nw-nano='sudo nano "/etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection"'
     alias print-env='echo "WA_ENV=$WA_ENV"'
     alias print-nw='echo -e "WA_NW1=$WA_NW1\WA_NW2=$WA_NW2"'
+    alias quit='cat /dev/null > ~/.bash_history && history -c && history -r && exit;'
     alias status-cockpit='systemctl status cockpit.socket --no-pager'
     alias status-firewall='systemctl status firewalld --no-pager'
     alias status-podman='systemctl --machine="5100@.host" --user status podman.socket --no-pager'

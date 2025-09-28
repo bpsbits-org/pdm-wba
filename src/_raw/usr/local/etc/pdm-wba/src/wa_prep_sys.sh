@@ -35,7 +35,10 @@ wa_prep_sys(){
     touch /var/lib/systemd/linger/wa
     chown root:root /var/lib/systemd/linger/wa
     chmod 0644 /var/lib/systemd/linger/wa
-    echo 'export XDG_RUNTIME_DIR=/run/user/5100' >> /home/wa/.bashrc
+cat >> /home/wa/.bashrc << 'EOF'
+source /usr/local/etc/pdm-wba/cnf/wa.conf
+source "${WA_USER_ALIASES}"
+EOF
     chown -R wa:wa /home/wa
     systemctl restart systemd-logind
     systemctl --machine="5100@.host" --user enable systemd-tmpfiles-setup.service

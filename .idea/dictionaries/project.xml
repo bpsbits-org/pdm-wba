@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="project">
     <words>
+      <w>journalctl</w>
       <w>restorecon</w>
       <w>semanage</w>
     </words>
