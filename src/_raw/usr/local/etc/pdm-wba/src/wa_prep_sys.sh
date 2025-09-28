@@ -38,6 +38,12 @@ wa_prep_sys(){
 cat >> /home/wa/.bashrc << 'EOF'
 source /usr/local/etc/pdm-wba/cnf/wa.conf
 source "${WA_USER_ALIASES}"
+wa_user_wa_aliases
+EOF
+cat > /home/wa/.bash_profile << 'EOF'
+if [ -f ~/.bashrc ]; then
+    source ~/.bashrc
+fi
 EOF
     chown -R wa:wa /home/wa
     systemctl restart systemd-logind
