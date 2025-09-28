@@ -1,7 +1,7 @@
 #!/bin/bash
 
-WA_INSTALL_DIR="/home/wa/install"
-DEBOUNCE_TIMEOUT=10
+source /usr/local/etc/pdm-wba/cnf/main.conf
+DEBOUNCE_TIMEOUT=5
 
 source /usr/local/etc/pdm-wba/src/wai_add_timer.sh
 source /usr/local/etc/pdm-wba/src/wai_user_srv.sh
@@ -140,7 +140,7 @@ wai_on_install_request() {
 }
 
 # Wait for debounce period
-sleep "$DEBOUNCE_TIMEOUT"
+sleep "${DEBOUNCE_TIMEOUT}"
 
 # Process in exact order
 wai_on_install_request

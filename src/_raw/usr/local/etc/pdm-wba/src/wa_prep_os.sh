@@ -2,11 +2,10 @@
 # wa_prep_os.sh
 
 wa_prep_os() {
-    local PACKAGES WA_DEPS
+    local PACKAGES
     echo "Installing required packages..."
     source /usr/local/etc/pdm-wba/cnf/main.conf
-    IFS=',' read -ra PACKAGES <<< "$WA_DEPS"
-
+    IFS=',' read -ra PACKAGES <<< "${WA_DEPS}"
     for pkg in "${PACKAGES[@]}"; do
         if ! rpm -q "$pkg" > /dev/null 2>&1; then
             echo "Installing $pkg..."

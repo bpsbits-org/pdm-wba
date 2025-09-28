@@ -65,6 +65,10 @@ EOF
     # Update SELinux
     semanage import -f /etc/selinux/local/port-config.semanage 2>/dev/null || true
 
+    # Make user Podman compatible
+    usermod --add-subuids 100000-165535 --add-subgids 100000-165535 wa || true
+    su - wa -c "podman system migrate" || true
+
     # Update System
     sysctl --system 2>/dev/null || true
     systemctl daemon-reload 2>/dev/null || true
