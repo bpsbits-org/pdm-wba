@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.0.35
+Version: 1.0.36
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -95,13 +95,15 @@ if [ $1 -eq 0 ]; then
 fi
 
 %posttrans
+    echo 'SSH port will change to 1022 and your session will disconnect.'
+    echo 'If disconnected, reconnect using port 1022'
     echo 'Displaying initial log of configuration process'
+    echo ' - - - - - - - - - - '
     timeout 10 journalctl -u pdm-wba-init.service --no-pager --since="5 minutes ago"
+    cho ' - - - - - - - - - - '
     echo 'System configuration is running in the background.'
     echo 'Please wait for the configuration process to finish.'
-    echo ' '
-    echo 'SSH port will change to 1022 and your session will disconnect.'
-    echo 'After disconnection, reconnect using port 1022 and run command below to monitor progress.'
+    echo 'To monitor background configuration process, run command:'
     echo '  journalctl -u pdm-wba-init --no-pager -f'
 
 

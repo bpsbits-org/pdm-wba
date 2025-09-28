@@ -75,8 +75,13 @@ EOF
 
     # Enable WA Install Monitor
     systemctl enable pdm-wba-install.path 2>/dev/null || true
+    systemctl enable pdm-wba-service.path 2>/dev/null || true
+    #
     systemctl enable pdm-wba-install.service 2>/dev/null || true
+    systemctl enable pdm-wba-auto-enable.service 2>/dev/null || true
+    #
     systemctl start pdm-wba-install.path 2>/dev/null || true
+    systemctl start pdm-wba-service.path 2>/dev/null || true
 
     #
     echo "System prepared"
