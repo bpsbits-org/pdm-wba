@@ -1,5 +1,6 @@
 #!/bin/bash
 # wa_env_aliases.sh
+# /usr/local/etc/pdm-wba/src
 
 wa_env_aliases(){
     alias nw-cat='sudo cat "/etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection"'
@@ -11,8 +12,9 @@ wa_env_aliases(){
     alias status-firewall='systemctl status firewalld --no-pager'
     alias status-podman='systemctl --machine="5100@.host" --user status podman.socket --no-pager'
     alias status-user='systemctl status user@5100 --no-pager'
-    alias wa-log-init='journalctl -u pdm-wba-init.service --no-pager'
     alias wa-log-init-follow='journalctl -u pdm-wba-init.service --no-pager -f'
+    alias wa-log-init='journalctl -u pdm-wba-init.service --no-pager'
+    alias wa-log-quadlet-change='journalctl -u pdm-wba-monitor-quadlet-dir.service --no-pager'
     alias wa-podman-ps='sudo -u "#5100" -i bash -c "podman ps -a"'
     alias wa-podman-update='sudo -u "#5100" -i bash -c "podman auto-update"'
     alias wa-services-all='systemctl --machine="5100@.host" --user list-units --type=service --all'
