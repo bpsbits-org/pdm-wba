@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.0.34
+Version: 1.0.35
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -73,10 +73,8 @@ if [ $1 -eq 1 ]; then
     systemd-tmpfiles --create >/dev/null 2>&1 || :
     # Trigger the one-time setup timer
     systemctl start pdm-wba-setup.timer >/dev/null 2>&1 || :
-    echo 'Background installation in progress.'
-    echo 'Please wait for completion.'
-    echo 'SSH port will change to 1022 and your session will disconnect during updates.'
-    echo 'After disconnection, reconnect and run "wa-log-init-follow" to monitor progress.'
+    echo 'System update completed.'
+    echo 'System configuration is now running in the background.'
 fi
 
 %postun
@@ -97,15 +95,14 @@ if [ $1 -eq 0 ]; then
 fi
 
 %posttrans
-    cat > /tmp/follow-logs.sh << 'EOF'
-#!/bin/bash
-journalctl -u pdm-wba-init.service --no-pager --since="5 minutes ago"
-timeout 60 journalctl -u pdm-wba-init.service --no-pager -f --since=now
-rm -f /tmp/follow-logs.sh
-EOF
-    chmod +x /tmp/follow-logs.sh
-    echo "Displaying logs of WA Initializer..."
-    /tmp/follow-logs.sh
+    echo 'Displaying initial log of configuration process'
+    timeout 10 journalctl -u pdm-wba-init.service --no-pager --since="5 minutes ago"
+    echo 'System configuration is running in the background.'
+    echo 'Please wait for the configuration process to finish.'
+    echo ' '
+    echo 'SSH port will change to 1022 and your session will disconnect.'
+    echo 'After disconnection, reconnect using port 1022 and run command below to monitor progress.'
+    echo '  journalctl -u pdm-wba-init --no-pager -f'
 
 
 %changelog
