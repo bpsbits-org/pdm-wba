@@ -1,5 +1,6 @@
+# pdm-wba-install.service
 [Unit]
-Description=Handles WA install requests
+Description=WA Install Requests Handler
 Requires=pdm-wba-install.path
 After=pdm-wba-install.path
 

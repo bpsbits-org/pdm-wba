@@ -1,5 +1,6 @@
+# pdm-wba-install.path
 [Unit]
-Description=Monitor for WA install requests
+Description=WA Install Requests Monitor
 
 [Path]
 DirectoryNotEmpty=/home/wa/install

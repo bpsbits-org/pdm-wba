@@ -1,6 +1,6 @@
 # pdm-wba-service.path
 [Unit]
-Description=Monitor for WA quadlets change
+Description=WA Quadlets Monitor
 
 [Path]
 DirectoryNotEmpty=/home/wa/.config/containers/systemd

@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.0.33
+Version: 1.0.34
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -97,8 +97,16 @@ if [ $1 -eq 0 ]; then
 fi
 
 %posttrans
-    journalctl -u pdm-wba-init.service --no-pager --since="5 minutes ago" &
-    timeout 30 journalctl -u pdm-wba-init.service --no-pager -f --since=now || : &
+    cat > /tmp/follow-logs.sh << 'EOF'
+#!/bin/bash
+journalctl -u pdm-wba-init.service --no-pager --since="5 minutes ago"
+timeout 60 journalctl -u pdm-wba-init.service --no-pager -f --since=now
+rm -f /tmp/follow-logs.sh
+EOF
+    chmod +x /tmp/follow-logs.sh
+    echo "Displaying logs of WA Initializer..."
+    /tmp/follow-logs.sh
+
 
 %changelog
 * Mon Sep 22 2025 PDM WBA Packager - 1.0.15

@@ -1,5 +1,6 @@
+# pdm-wba-setup.timer
 [Unit]
-Description=One-time PDM-WBA setup timer
+Description=WA Setup Timer
 After=network.target
 
 [Timer]

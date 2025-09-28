@@ -1,5 +1,6 @@
+# pdm-wba-setup.service
 [Unit]
-Description=One-time PDM-WBA setup
+Description=WA System Configurator (One Time)
 Requires=pdm-wba-init.service
 After=pdm-wba-init.service
 Before=multi-user.target

@@ -1,5 +1,6 @@
+# pdm-wba-init.service
 [Unit]
-Description=Initialises PDM-WBA in the target system
+Description=WA Initializer
 After=network-online.target
 Wants=network-online.target
 
