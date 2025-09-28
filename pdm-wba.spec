@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.0.31
+Version: 1.0.32
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -73,10 +73,11 @@ if [ $1 -eq 1 ]; then
     systemd-tmpfiles --create >/dev/null 2>&1 || :
     # Trigger the one-time setup timer
     systemctl start pdm-wba-setup.timer >/dev/null 2>&1 || :
-    echo 'Background installation tasks are currently running.'
-    echo 'Please wait until these tasks are completed!'
-    echo 'SSH port will be changed to 1022 and current terminal session will be dropped during updates.'
-    echo 'Reconnect and run "wa-log-init" to check status.'
+    echo 'Background installation in progress.'
+    echo 'Please wait for completion.'
+    echo 'SSH port will change to 1022 and your session will disconnect during updates.'
+    echo 'After disconnection, reconnect and run "wa-log-init-follow" to monitor progress.'
+    journalctl -u pdm-wba-init.service --no-pager -f
 fi
 
 %postun

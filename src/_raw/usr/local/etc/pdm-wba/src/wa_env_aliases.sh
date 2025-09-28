@@ -12,6 +12,7 @@ wa_env_aliases(){
     alias status-podman='systemctl --machine="5100@.host" --user status podman.socket --no-pager'
     alias status-user='systemctl status user@5100 --no-pager'
     alias wa-log-init='journalctl -u pdm-wba-init.service --no-pager'
+    alias wa-log-init-follow='journalctl -u pdm-wba-init.service --no-pager -f'
     alias wa-podman-ps='sudo -u "#5100" -i bash -c "podman ps -a"'
     alias wa-podman-update='sudo -u "#5100" -i bash -c "podman auto-update"'
     alias wa-services-all='systemctl --machine="5100@.host" --user list-units --type=service --all'
