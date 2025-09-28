@@ -19,7 +19,7 @@ wa_env_aliases(){
     alias wa-services-failed='systemctl --machine="5100@.host" --user list-units --type=service --state=failed'
     alias wa-services='systemctl --machine="5100@.host" --user list-unit-files --type=service'
     alias wa-update='sudo dnf update --refresh pdm-wba -y'
-    alias wai-log='journalctl -u pdm-wba-install.service --no-pager'
+    alias wai-log='journalctl -u pdm-wba-quadlet-install.service --no-pager'
     alias wai-reload='systemctl --machine="5100@.host" --user daemon-reload'
     alias wai-reset='systemctl --machine="5100@.host" --user reset-failed'
 }

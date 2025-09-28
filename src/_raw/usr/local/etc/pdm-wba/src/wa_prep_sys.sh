@@ -73,15 +73,15 @@ EOF
     systemctl --machine="5100@.host" --user enable podman.socket
     systemctl --machine="5100@.host" --user start podman.socket
 
-    # Enable WA Install Monitor
-    systemctl enable pdm-wba-install.path 2>/dev/null || true
-    systemctl enable pdm-wba-service.path 2>/dev/null || true
+    # Enable WA Quadlet Drop Monitor
+    systemctl enable pdm-wba-monitor-qd-install-dir.path 2>/dev/null || true
+    systemctl enable pdm-wba-monitor-quadlet-dir.service 2>/dev/null || true
     #
-    systemctl enable pdm-wba-install.service 2>/dev/null || true
+    systemctl enable pdm-wba-quadlet-install.service 2>/dev/null || true
     systemctl enable pdm-wba-auto-enable.service 2>/dev/null || true
     #
-    systemctl start pdm-wba-install.path 2>/dev/null || true
-    systemctl start pdm-wba-service.path 2>/dev/null || true
+    systemctl start pdm-wba-monitor-qd-install-dir.path 2>/dev/null || true
+    systemctl start pdm-wba-monitor-quadlet-dir.service 2>/dev/null || true
 
     #
     echo "System prepared"

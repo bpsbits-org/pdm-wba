@@ -1,4 +1,6 @@
+# System Configuration Service
 # pdm-wba-setup.service
+# /etc/systemd/system
 [Unit]
 Description=WA System Configurator (One Time)
 Requires=pdm-wba-init.service

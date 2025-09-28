@@ -1,0 +1,18 @@
+# Quadlets Installation Service
+# pdm-wba-quadlet-install.service
+# /etc/systemd/system
+[Unit]
+Description=WA Install Requests Handler
+Requires=pdm-wba-monitor-qd-install-dir.path
+After=pdm-wba-monitor-qd-install-dir.path
+
+[Service]
+Type=oneshot
+ExecStartPre=/bin/sleep 10
+ExecStart=/usr/local/bin/pdm-wba-quadlet-install.sh
+RemainAfterExit=no
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

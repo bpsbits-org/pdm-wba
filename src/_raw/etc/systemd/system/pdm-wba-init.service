@@ -1,4 +1,6 @@
+# Intialization Service
 # pdm-wba-init.service
+# /etc/systemd/system
 [Unit]
 Description=WA Initializer
 After=network-online.target

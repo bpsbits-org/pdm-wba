@@ -1,4 +1,6 @@
+# Boot Time Trigger for System Configuration
 # pdm-wba-setup.timer
+# /etc/systemd/system
 [Unit]
 Description=WA Setup Timer
 After=network.target

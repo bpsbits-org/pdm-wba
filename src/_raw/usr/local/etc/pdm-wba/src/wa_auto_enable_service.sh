@@ -1,9 +1,11 @@
 #!/bin/bash
 # wa_auto_enable_service.sh
+# /usr/local/etc/pdm-wba/src
 
 wa_auto_enable_service(){
     local file filename extension srv_core_name srv_name
     file="$1"
+    echo -e "${file}"
     # Exit if file is not a quadlet type
     [[ "$file" =~ \.(container|volume|network|pod)$ ]] || return 0
     filename=$(basename "${file}")

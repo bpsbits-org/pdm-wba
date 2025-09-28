@@ -1,0 +1,14 @@
+# Quadlets Change Monitor
+# pdm-wba-monitor-quadlet-dir.service
+# /etc/systemd/system
+[Unit]
+Description=WA Quadlet Monitor
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/pdm-wba-quadlet-monitor.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

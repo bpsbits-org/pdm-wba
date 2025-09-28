@@ -1,0 +1,14 @@
+# Quadlets DropBox Monitor
+# pdm-wba-monitor-qd-install-dir.path
+# /etc/systemd/system
+[Unit]
+Description=WA Quadlets DropBox Monitor
+
+[Path]
+DirectoryNotEmpty=/home/wa/install
+PathChanged=/home/wa/install
+PathExists=/home/wa/install
+Unit=pdm-wba-quadlet-install.service
+
+[Install]
+WantedBy=multi-user.target
