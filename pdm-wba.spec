@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.0.32
+Version: 1.0.33
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -77,7 +77,6 @@ if [ $1 -eq 1 ]; then
     echo 'Please wait for completion.'
     echo 'SSH port will change to 1022 and your session will disconnect during updates.'
     echo 'After disconnection, reconnect and run "wa-log-init-follow" to monitor progress.'
-    journalctl -u pdm-wba-init.service --no-pager -f
 fi
 
 %postun
@@ -96,6 +95,10 @@ if [ $1 -eq 0 ]; then
     # Complete uninstall
     systemctl disable pdm-wba-init.service pdm-wba-setup.timer >/dev/null 2>&1 || :
 fi
+
+%posttrans
+    journalctl -u pdm-wba-init.service --no-pager --since="5 minutes ago" &
+    timeout 30 journalctl -u pdm-wba-init.service --no-pager -f --since=now || : &
 
 %changelog
 * Mon Sep 22 2025 PDM WBA Packager - 1.0.15
