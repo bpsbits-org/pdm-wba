@@ -2,4 +2,4 @@ enable cockpit.socket
 enable firewalld.service
 enable pmcd.service
 enable pmlogger.service
-enable user@5100.service
+enable user@300.service

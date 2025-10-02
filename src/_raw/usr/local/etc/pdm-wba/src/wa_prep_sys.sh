@@ -47,15 +47,15 @@ fi
 EOF
     chown -R wa:wa /home/wa
     systemctl restart systemd-logind
-    systemctl --machine="5100@.host" --user enable systemd-tmpfiles-setup.service
-    systemctl --machine="5100@.host" --user start systemd-tmpfiles-setup.service
+    systemctl --machine="300@.host" --user enable systemd-tmpfiles-setup.service
+    systemctl --machine="300@.host" --user start systemd-tmpfiles-setup.service
 
     # Enable Firewall
     systemctl enable firewalld
     systemctl start firewalld
 
     # Import presets
-    systemctl preset firewalld.service cockpit.socket pmcd.service pmlogger.service user@5100.service 2>/dev/null || true
+    systemctl preset firewalld.service cockpit.socket pmcd.service pmlogger.service user@300.service 2>/dev/null || true
 
     # Update Firewall
     firewall-cmd --permanent --remove-service=ssh 2>/dev/null || true
@@ -74,8 +74,8 @@ EOF
     systemctl daemon-reload 2>/dev/null || true
 
     # Start podman
-    systemctl --machine="5100@.host" --user enable podman.socket
-    systemctl --machine="5100@.host" --user start podman.socket
+    systemctl --machine="300@.host" --user enable podman.socket
+    systemctl --machine="300@.host" --user start podman.socket
 
     # Enable WA Quadlet Drop Monitor
     systemctl enable pdm-wba-monitor-qd-install-dir.path 2>/dev/null || true

@@ -9,7 +9,7 @@ wai_add_timer(){
         source /usr/local/etc/pdm-wba/src/wai_fix_owner.sh
         cp "/usr/local/etc/pdm-wba/cnf/${timer_conf}" "${timer_file}"
         wai_fix_owner "${timer_file}"
-        systemctl --machine="5100@.host" --user enable --now podman-auto-update.timer
+        systemctl --machine="300@.host" --user enable --now podman-auto-update.timer
         echo "Created WA timer"
     fi
 }

@@ -10,7 +10,7 @@ wai_install_service(){
     if [ -f "${file}" ]; then
         mv "${file}" "${dest_file}"
         wai_fix_owner "${dest_file}"
-        systemctl --machine="5100@.host" --user daemon-reload
+        systemctl --machine="300@.host" --user daemon-reload
         echo "Installed ${filename}"
     fi
 }

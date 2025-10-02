@@ -14,15 +14,15 @@ wa_handle_quadlet_change(){
     # Set service name: no suffix for .container, otherwise -<type>
     [ "${extension}" == "container" ] && extension="" || extension="-${extension}"
     srv_name="${srv_core_name}${extension}.service"
+    systemctl --machine="300@.host" --user daemon-reload
     if [ -f "${file}" ]; then
         echo "Processing service for '${filename}'..."
-        systemctl --machine="5100@.host" --user daemon-reload
-        if ! systemctl --machine="5100@.host" --user is-active "${srv_name}" &>/dev/null; then
+        if ! systemctl --machine="300@.host" --user is-active "${srv_name}" &>/dev/null; then
             echo "Starting service '${srv_name}'..."
-            systemctl --machine="5100@.host" --user start "${srv_name}" --no-pager
+            systemctl --machine="300@.host" --user start "${srv_name}" --no-pager
         else
             echo "Service '${srv_name}' is already active, skipping."
         fi
-        systemctl --machine="5100@.host" --user status "${srv_name}" --no-pager
+        systemctl --machine="300@.host" --user status "${srv_name}" --no-pager
     fi
 }

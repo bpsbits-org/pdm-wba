@@ -2,7 +2,7 @@
 # wai_user_srv.sh
 
 wai_user_srv(){
-    local service="user@5100.service"
+    local service="user@300.service"
     if ! systemctl is-enabled $service &>/dev/null; then
         echo "Enabling $service..."
         systemctl enable $service
