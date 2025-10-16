@@ -17,7 +17,7 @@ wa_env_aliases(){
     alias wa-help='/usr/local/etc/pdm-wba/src/wa_help.sh --print'
     alias wa-log-init-follow='journalctl -u pdm-wba-init.service --no-pager -f'
     alias wa-log-init='journalctl -u pdm-wba-init.service --no-pager'
-    alias wa-reload-env='/usr/local/etc/pdm-wba/src/wa_env.sh --reload'
+    alias wa-reload-env='source /usr/local/etc/pdm-wba/src/wa_env.sh --reload'
     alias wa-services-all='systemctl --machine="300@.host" --user list-units --type=service --all'
     alias wa-services-failed='systemctl --machine="300@.host" --user list-units --type=service --state=failed'
     alias wa-services='systemctl --machine="300@.host" --user list-unit-files --type=service'

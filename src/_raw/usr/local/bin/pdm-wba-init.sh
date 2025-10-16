@@ -4,11 +4,9 @@
 
 make_conf_file_if_needed(){
     local conf_file="/var/lib/pdm-wba/wa.conf"
-    [ -f "${conf_file}" ] || cat > "${conf_file}" << 'EOF'
-WA_ENV=dev
-WA_SDO=false
-EOF
-    /usr/local/etc/pdm-wba/src/wa_env.sh --reload
+    local default_conf="/var/lib/pdm-wba/wa-default.conf"
+    [ -f "${conf_file}" ] || cp "${default_conf}" "${conf_file}"
+    source /usr/local/etc/pdm-wba/src/wa_env.sh --reload
 }
 
 # Marks system initialization as done

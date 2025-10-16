@@ -29,5 +29,5 @@ wa_conf_update() {
         }
     fi
     echo "Updated '${key}' to: ${value}"
-    /usr/local/etc/pdm-wba/src/wa_env.sh --reload
+    source /usr/local/etc/pdm-wba/src/wa_env.sh --reload
 }
