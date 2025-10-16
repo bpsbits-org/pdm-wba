@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.4.0
+Version: 1.4.1
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -89,6 +89,7 @@ fi
 
 %posttrans
     echo "Installation done."
+    /usr/local/etc/pdm-wba/src/wa_env.sh --reload
     if [ -z "${WA_SDO}" ] || [ "${WA_SDO,,}" = "false" ]; then
         echo 'NB! Additional system configuration is running in the background.'
         echo 'SSH port will change to 1022 and your session will disconnect.'

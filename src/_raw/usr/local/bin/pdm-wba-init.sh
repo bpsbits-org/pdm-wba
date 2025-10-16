@@ -8,6 +8,7 @@ make_conf_file_if_needed(){
 WA_ENV=dev
 WA_SDO=false
 EOF
+    /usr/local/etc/pdm-wba/src/wa_env.sh --reload
 }
 
 # Marks system initialization as done
@@ -35,7 +36,6 @@ init_new_system(){
 check_and_run() {
     local IS_INIT_DONE
     make_conf_file_if_needed
-    source /var/lib/pdm-wba/wa.conf
     if [ -z "${WA_SDO}" ] || [ "${WA_SDO,,}" = "false" ]; then
         IS_INIT_DONE=false
     else

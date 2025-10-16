@@ -13,5 +13,5 @@ wa_env(){
 
 # Check if --print argument is provided
 if [[ "$1" == "--reload" ]]; then
-    wa_set_env
+    wa_env
 fi
