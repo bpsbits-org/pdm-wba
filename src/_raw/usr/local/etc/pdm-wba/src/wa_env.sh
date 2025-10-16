@@ -4,8 +4,7 @@
 
 # Exports configuration
 wa_env(){
-    local WA_ENV WA_SDO
+    set -a
     source /var/lib/pdm-wba/wa.conf
-    export WA_ENV="${WA_ENV}"
-    export WA_SDO="${WA_SDO}"
+    set +a
 }
