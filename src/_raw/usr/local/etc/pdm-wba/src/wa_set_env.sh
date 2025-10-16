@@ -25,19 +25,19 @@ wa_set_env_prompt(){
     local SELECTED_ENV_TYPE=""
     IFS=',' read -ra ENV_TYPES <<< "${WA_ENV_TYPES}"
     echo "Select environment type:"
-    echo -e "\t0. Cancel"
+    echo -e "\t0 - Cancel changing the environment type."
     for i in "${!ENV_TYPES[@]}"; do
-        echo -e "\t$((i+1)). ${ENV_TYPES[$i]}"
+        echo -e "\t$((i+1)). - ${ENV_TYPES[$i]}"
     done
     read -r -p "Enter your choice: " USR_SELECTED_ID
     if [[ -z "${USR_SELECTED_ID}" ]] || [[ "${USR_SELECTED_ID}" == "0" ]]; then
-        echo "Operation cancelled"
+        echo "Operation cancelled."
     elif [[ "${USR_SELECTED_ID}" =~ ^[0-9]+$ ]] && [ "${USR_SELECTED_ID}" -ge 1 ] && [ "${USR_SELECTED_ID}" -le "${#ENV_TYPES[@]}" ]; then
         SELECTED_ENV_TYPE="${ENV_TYPES[$((USR_SELECTED_ID-1))]}"
         echo "Selected: ${SELECTED_ENV_TYPE}"
         wa_conf_update "WA_ENV" "${SELECTED_ENV_TYPE}"
     else
-        echo "Invalid choice, please try again."
+        echo "Invalid choice. Please try again."
         wa_set_env_prompt
     fi
 }
