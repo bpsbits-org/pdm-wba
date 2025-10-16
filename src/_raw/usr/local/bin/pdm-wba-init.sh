@@ -1,12 +1,15 @@
 #!/bin/bash
 # pdm-wba-init.sh
+# /usr/local/bin
 
+# Marks system initialization as done
 mark_init_done(){
     source /usr/local/etc/pdm-wba/src/wa_conf_update.sh
     wa_conf_update "WA_SDO" "true"
     echo "System initialization marked as done."
 }
 
+# Performs full WA system initialization: prepares OS, SSH, and system components, then marks completion.
 init_new_system(){
     echo "Initializing"
     # Sources
@@ -20,6 +23,7 @@ init_new_system(){
     mark_init_done
 }
 
+# Checks if WA is initialized and runs full system initialization if needed.
 check_and_run() {
     local IS_INIT_DONE
     source /var/lib/pdm-wba/wa.conf

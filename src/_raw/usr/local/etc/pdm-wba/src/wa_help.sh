@@ -1,6 +1,8 @@
 #!/bin/bash
 # wa_help.sh
+# /usr/local/etc/pdm-wba/src
 
+# Displays a list of available WA commands with descriptions
 wa_help(){
     echo -e "List of WA Commands:"
     echo -e "\033[1;33m  nw-cat \033[0m               View network configuration file contents.";

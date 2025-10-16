@@ -1,6 +1,8 @@
 #!/bin/bash
 # wai_install_service.sh
+# /usr/local/etc/pdm-wba/src
 
+# Installs a quadlet service file for WA by moving it to the user's config directory and reloading daemon
 wai_install_service(){
     local file filename dest_file
     file=$1

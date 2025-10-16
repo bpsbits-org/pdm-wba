@@ -1,9 +1,9 @@
 Name: pdm-wba
-Version: 1.1.5
+Version: 1.1.6
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
-BuildRequires: systemd-rpm-macros tree
+BuildRequires: systemd-rpm-macros
 Source0: https://github.com/bpsbits-org/pdm-wba/archive/refs/heads/main.tar.gz
 
 %global debug_package %{nil}
@@ -13,7 +13,6 @@ Podman based Web Application Server
 
 %prep
 %setup -q -c
-echo "prep directory structure:"
 
 %build
 # No build needed
@@ -21,7 +20,6 @@ echo "prep directory structure:"
 %install
 SRC_DIR=$(realpath .)
 WBA_DIR="${SRC_DIR}/pdm-wba-main/src/_raw"
-BLD_DIR=%{buildroot}
 
 # Go to source dir
 cd "${WBA_DIR}" || exit 1
@@ -39,12 +37,8 @@ find . -type f ! -name "*.sh" -exec sh -c 'install -Dm644 "$1" "%{buildroot}/${1
 cd "${SRC_DIR}" || exit 1
 
 # Generate dynamic files list for RPM packaging
-> files.list
+:> files.list
 find "%{buildroot}" -type f | sed 's|^%{buildroot}||' | sort >> files.list
-
-tree "${BLD_DIR}"
-
-cat files.list
 
 %files -f files.list
 %defattr(-,root,root,-)
@@ -95,22 +89,18 @@ if [ $1 -eq 0 ]; then
 fi
 
 %posttrans
-    echo 'SSH port will change to 1022 and your session will disconnect.'
-    echo 'If disconnected, reconnect using port 1022'
     echo 'System configuration is running in the background.'
+    echo 'SSH port will change to 1022 and your session will disconnect.'
+    echo 'If disconnected, reconnect using port 1022.'
     echo 'Please wait for the configuration process to finish.'
     echo 'To monitor background configuration process, run command:'
     echo '  journalctl -u pdm-wba-init --no-pager -f'
 
 
 %changelog
-* Mon Sep 22 2025 PDM WBA Packager - 1.0.15
-- Initial package
-* Mon Sep 22 2025 PDM WBA Packager - 1.0.16
-- Updates
-* Mon Sep 22 2025 PDM WBA Packager - 1.0.17
-- Updates
-* Mon Sep 22 2025 PDM WBA Packager - 1.0.18
-- Updates
-* Mon Sep 22 2025 PDM WBA Packager - 1.0.19
-- Updates
+* Fri Oct 3 2025 PDM WBA Packager - 1.1.6
+- Misc improvements
+* Fri Oct 3 2025 PDM WBA Packager - 1.1.5
+- Misc improvements
+* Mon Sep 22 2025 PDM WBA Packager - 1.1.0
+- Initial release

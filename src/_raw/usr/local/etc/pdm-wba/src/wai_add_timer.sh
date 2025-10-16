@@ -1,6 +1,8 @@
 #!/bin/bash
 # wai_add_timer.sh
+# /usr/local/etc/pdm-wba/src
 
+# Adds and enables the podman auto-update timer for WA if not already present
 wai_add_timer(){
     local timer_conf
     timer_conf='podman-auto-update.timer.d/override.conf'

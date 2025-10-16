@@ -1,6 +1,8 @@
 #!/bin/bash
 # wa_env_nw.sh
+# /usr/local/etc/pdm-wba/src
 
+# Extracts and exports network IP addresses from cloud-init eth0 connection
 wa_env_nw() {
     local NW_CNF SRV_NW1_IP SRV_NW2_IP SRV_NW3_IP SRV_NW4_IP
     NW_CNF=$(nmcli -t -f IP4.ADDRESS connection show "cloud-init eth0")

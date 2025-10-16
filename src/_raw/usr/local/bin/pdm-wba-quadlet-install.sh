@@ -1,4 +1,6 @@
 #!/bin/bash
+# pdm-wba-quadlet-install.sh
+# /usr/local/bin
 
 source /usr/local/etc/pdm-wba/cnf/main.conf
 DEBOUNCE_TIMEOUT=5

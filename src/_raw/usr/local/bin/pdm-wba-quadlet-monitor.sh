@@ -1,6 +1,7 @@
 #!/bin/bash
 # pdm-wba-quadlet-monitor.sh
 # /usr/local/bin
+
 set +e
 source /usr/local/etc/pdm-wba/cnf/main.conf
 source /usr/local/etc/pdm-wba/src/wa_handle_quadlet_change.sh

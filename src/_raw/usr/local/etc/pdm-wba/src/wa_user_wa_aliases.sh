@@ -1,6 +1,8 @@
 #!/bin/bash
 # wa_user_wa_aliases.sh
+# /usr/local/etc/pdm-wba/src
 
+# Sets up user-specific aliases for WA convenience commands
 wa_user_wa_aliases(){
     alias containers='podman ps -a'
     alias daemon-reload='systemctl --user daemon-reload'

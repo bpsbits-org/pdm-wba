@@ -1,6 +1,8 @@
 #!/bin/bash
 # wa_prep_os.sh
+# /usr/local/etc/pdm-wba/src
 
+# Installs required OS packages for WA setup with retry logic
 wa_prep_os() {
     local PACKAGES
     echo "Installing required packages..."

@@ -2,6 +2,7 @@
 # wa_handle_quadlet_change.sh
 # /usr/local/etc/pdm-wba/src
 
+# Handles quadlet file changes by starting or checking corresponding services
 wa_handle_quadlet_change(){
     local file filename extension srv_core_name srv_name
     file="$1"

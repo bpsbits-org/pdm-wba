@@ -1,6 +1,8 @@
 #!/bin/bash
 # wa_prep_sys.sh
+# /usr/local/etc/pdm-wba/src
 
+# Waits for firewall-cmd and semanage tools to become available with timeout
 wait_for_tools() {
     local timeout=10
     local count=0
@@ -23,6 +25,7 @@ wait_for_tools() {
     return 1
 }
 
+# Prepares the system for WA by configuring services, firewall, SELinux, and user settings
 wa_prep_sys(){
     echo "Adjusting system..."
 

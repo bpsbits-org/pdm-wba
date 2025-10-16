@@ -2,6 +2,7 @@
 # wa_env_aliases.sh
 # /usr/local/etc/pdm-wba/src
 
+# Sets up WA environment aliases for convenience commands
 wa_env_aliases(){
     alias nw-cat='sudo cat "/etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection"'
     alias nw-edit='sudo nano "/etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection"'

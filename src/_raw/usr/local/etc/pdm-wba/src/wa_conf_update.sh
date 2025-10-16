@@ -1,6 +1,8 @@
 #!/bin/bash
 # wa_conf_update.sh
+# /usr/local/etc/pdm-wba/src
 
+# # Updates or adds a configuration key-value pair in WA conf
 wa_conf_update() {
     local key value conf_file
     key="$1"

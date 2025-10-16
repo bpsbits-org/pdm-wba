@@ -1,6 +1,8 @@
 #!/bin/bash
 # wai_update_vars
+# /usr/local/etc/pdm-wba/src
 
+# Replaces environment variables in the specified file with their actual values
 wai_update_vars(){
     local file escaped_value value vars temp_file
     file=$1
