@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.2.8
+Version: 1.3.0
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
