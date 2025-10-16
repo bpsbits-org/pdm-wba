@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.1.8
+Version: 1.2.8
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -68,7 +68,6 @@ if [ $1 -eq 1 ]; then
     # Trigger the one-time setup timer
     systemctl start pdm-wba-setup.timer >/dev/null 2>&1 || :
     echo 'System update completed.'
-    echo 'System configuration is now running in the background.'
 fi
 
 %postun
@@ -89,12 +88,15 @@ if [ $1 -eq 0 ]; then
 fi
 
 %posttrans
-    echo 'System configuration is running in the background.'
-    echo 'SSH port will change to 1022 and your session will disconnect.'
-    echo 'If disconnected, reconnect using port 1022.'
-    echo 'Please wait for the configuration process to finish.'
-    echo 'To monitor background configuration process, run command:'
-    echo '  journalctl -u pdm-wba-init --no-pager -f'
+    echo "Installation done."
+    if [ -z "${WA_SDO}" ] || [ "${WA_SDO,,}" = "false" ]; then
+        echo 'NB! Additional system configuration is running in the background.'
+        echo 'SSH port will change to 1022 and your session will disconnect.'
+        echo 'If disconnected, reconnect using port 1022.'
+        echo 'Please wait for the configuration process to finish.'
+        echo 'To monitor background configuration process, run command:'
+        echo '  journalctl -u pdm-wba-init --no-pager -f'
+    fi
 
 
 %changelog

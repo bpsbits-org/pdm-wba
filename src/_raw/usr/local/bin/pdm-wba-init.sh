@@ -2,6 +2,14 @@
 # pdm-wba-init.sh
 # /usr/local/bin
 
+make_conf_file_if_needed(){
+    local conf_file="/var/lib/pdm-wba/wa.conf"
+    [ -f "${conf_file}" ] || cat > "${conf_file}" << 'EOF'
+WA_ENV=dev
+WA_SDO=false
+EOF
+}
+
 # Marks system initialization as done
 mark_init_done(){
     source /usr/local/etc/pdm-wba/src/wa_conf_update.sh
@@ -26,8 +34,9 @@ init_new_system(){
 # Checks if WA is initialized and runs full system initialization if needed.
 check_and_run() {
     local IS_INIT_DONE
+    make_conf_file_if_needed
     source /var/lib/pdm-wba/wa.conf
-    if [ -z "$WA_SDO" ] || [ "${WA_SDO,,}" = "false" ]; then
+    if [ -z "${WA_SDO}" ] || [ "${WA_SDO,,}" = "false" ]; then
         IS_INIT_DONE=false
     else
         IS_INIT_DONE=true

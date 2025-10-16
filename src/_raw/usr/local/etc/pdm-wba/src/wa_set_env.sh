@@ -15,6 +15,7 @@ wa_set_env (){
             wa_set_env_prompt
         else
             echo "Cancelled changing environment type."
+            return 0
         fi
     else
         wa_set_env_prompt
@@ -36,6 +37,7 @@ wa_set_env_prompt(){
         SELECTED_ENV_TYPE="${ENV_TYPES[$((USR_SELECTED_ID-1))]}"
         echo "Selected: ${SELECTED_ENV_TYPE}"
         wa_conf_update "WA_ENV" "${SELECTED_ENV_TYPE}"
+        return 0
     else
         echo "Invalid choice. Please try again."
         wa_set_env_prompt

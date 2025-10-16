@@ -4,7 +4,9 @@
 
 # Displays a list of available WA commands with descriptions
 wa_help(){
+    echo""
     echo -e "List of WA Commands:"
+    echo ""
     echo -e "\033[1;33m  nw-cat \033[0m               View network configuration file contents.";
     echo -e "\033[1;33m  nw-edit \033[0m              Edit network configuration file in text editor.";
     echo -e "\033[1;33m  print-env \033[0m            Displays current server environment type.";
@@ -29,6 +31,7 @@ wa_help(){
     echo -e "\033[1;33m  wai-reload \033[0m           Reload WA services configuration.";
     echo -e "\033[1;33m  wai-reset \033[0m            Clear the list of failed WA services.";
     echo -e "\033[1;33m  wai-set-env \033[0m          Sets the environment type";
+    echo ""
 }
 
 # Check if --print argument is provided

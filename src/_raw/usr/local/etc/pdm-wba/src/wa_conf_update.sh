@@ -8,6 +8,9 @@ wa_conf_update() {
     key="$1"
     value="$2"
     conf_file="/var/lib/pdm-wba/wa.conf"
+    if [ ! -f "${conf_file}" ]; then
+        touch "${conf_file}"
+    fi
     # Check if both key and value are provided
     if [ $# -ne 2 ]; then
         echo "Error: Usage: wa_conf_update <key> <value>" >&2
@@ -26,4 +29,5 @@ wa_conf_update() {
         }
     fi
     echo "Updated '${key}' to: ${value}"
+    /usr/local/etc/pdm-wba/src/wa_env.sh --reload
 }
