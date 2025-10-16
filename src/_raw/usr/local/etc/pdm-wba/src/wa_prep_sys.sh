@@ -25,6 +25,20 @@ wait_for_tools() {
     return 1
 }
 
+wa_make_remote_rss_key_if_needed(){
+    local wa_rss_key_file wa_ssh_dir epoch
+    epoch=$(date +%s)
+    wa_rss_key_file="/home/wa/.ssh/wa_remote_rss"
+    wa_ssh_dir="$(dirname "${wa_rss_key_file}")"
+    if [ ! -f "${wa_rss_key_file}" ]; then
+        mkdir -p "${wa_ssh_dir}"
+        ssh-keygen -t rsa -b 4096 -f "${wa_rss_key_file}" -q -N "" -C "wa-rss-${epoch}@${HOSTNAME}"
+        chown -R wa:wa "${wa_ssh_dir}"
+        chmod 700 "${wa_ssh_dir}"
+        chmod 600 "${wa_rss_key_file}"
+    fi
+}
+
 # Prepares the system for WA by configuring services, firewall, SELinux, and user settings
 wa_prep_sys(){
     echo "Adjusting system..."
@@ -89,6 +103,9 @@ EOF
     #
     systemctl start pdm-wba-monitor-qd-install-dir.path 2>/dev/null || true
     systemctl start pdm-wba-monitor-quadlet-dir.service 2>/dev/null || true
+
+    # Make remote rss key for wa
+    wa_make_remote_rss_key_if_needed
 
     #
     echo "System prepared"
