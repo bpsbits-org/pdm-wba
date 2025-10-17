@@ -46,7 +46,8 @@ wa_set_env_prompt(){
     fi
 }
 
-# Check if --print argument is provided
+# Check if --set argument is provided
+# source /usr/local/etc/pdm-wba/src/wa_set_env.sh --set
 if [[ "$1" == "--set" ]]; then
     wa_set_env
 fi

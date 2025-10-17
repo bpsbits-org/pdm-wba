@@ -1,5 +1,5 @@
 Name: pdm-wba
-Version: 1.4.3
+Version: 1.5.0
 Release: 1%{?dist}
 Summary: Podman based Web Application Server
 License: GPL-3.0-or-later
@@ -88,6 +88,7 @@ if [ $1 -eq 0 ]; then
 fi
 
 %posttrans
+    source /usr/local/etc/pdm-wba/src/wa_conf_clone.sh --run
     source /usr/local/etc/pdm-wba/src/wa_env.sh --reload
     if [ -z "${WA_SDO}" ] || [ "${WA_SDO,,}" = "false" ]; then
         echo "Installation done."

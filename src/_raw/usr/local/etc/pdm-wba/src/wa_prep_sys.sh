@@ -103,6 +103,9 @@ EOF
     #
     systemctl start pdm-wba-monitor-qd-install-dir.path 2>/dev/null || true
     systemctl start pdm-wba-monitor-quadlet-dir.service 2>/dev/null || true
+    #
+    systemctl enable fail2ban 2>/dev/null || true
+    systemctl start fail2ban 2>/dev/null || true
 
     # Make remote rss key for wa
     wa_make_remote_rss_key_if_needed

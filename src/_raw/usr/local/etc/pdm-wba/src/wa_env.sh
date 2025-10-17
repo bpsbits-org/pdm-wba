@@ -11,7 +11,8 @@ wa_env(){
     fi
 }
 
-# Check if --print argument is provided
+# Check if --reload argument is provided
+# source /usr/local/etc/pdm-wba/src/wa_env.sh --reload
 if [[ "$1" == "--reload" ]]; then
     wa_env
 fi
