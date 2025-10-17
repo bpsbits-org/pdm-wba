@@ -52,11 +52,13 @@ wa_prep_sys(){
     touch /var/lib/systemd/linger/wa
     chown root:root /var/lib/systemd/linger/wa
     chmod 0644 /var/lib/systemd/linger/wa
+# TODO Improvement needed
 cat >> /home/wa/.bashrc << 'EOF'
 source /usr/local/etc/pdm-wba/cnf/wa.conf
 source "${WA_USER_ALIASES}"
 wa_user_wa_aliases
 EOF
+# TODO Improvement needed
 cat > /home/wa/.bash_profile << 'EOF'
 if [ -f ~/.bashrc ]; then
     source ~/.bashrc

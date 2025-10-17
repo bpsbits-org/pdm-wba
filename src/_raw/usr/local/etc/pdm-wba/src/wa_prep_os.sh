@@ -18,6 +18,7 @@ wa_prep_os() {
                 else
                     if [ $attempt -eq 3 ]; then
                         echo "WARNING. Failed to install $pkg after $attempt attempts!"
+                        return 0
                     else
                         sleep $((attempt * 2))
                     fi

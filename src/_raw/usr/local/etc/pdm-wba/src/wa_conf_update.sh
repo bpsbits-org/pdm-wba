@@ -13,7 +13,7 @@ wa_conf_update() {
     fi
     # Check if both key and value are provided
     if [ $# -ne 2 ]; then
-        echo "Error: Usage: wa_conf_update <key> <value>" >&2
+        echo -e "\033[1;33mError\033[0m: Invalid inputs. Usage: wa_conf_update <key> <value>" >&2
         return 1
     fi
     # Update existing key or append new one
@@ -28,6 +28,12 @@ wa_conf_update() {
             return 1
         }
     fi
-    echo "Updated '${key}' to: ${value}"
+    echo -e "Updated \033[1;33m${key}\033[0m to: \033[1;33m${value}\033[0m"
     source /usr/local/etc/pdm-wba/src/wa_env.sh --reload
 }
+
+# Check if --set argument is provided
+# source /usr/local/etc/pdm-wba/src/wa_conf_update.sh --set
+if [[ "$1" == "--set" ]]; then
+    wa_conf_update "$2" "$3"
+fi

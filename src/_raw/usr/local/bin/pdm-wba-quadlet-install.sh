@@ -11,6 +11,7 @@ source /usr/local/etc/pdm-wba/src/wai_fix_owner.sh
 source /usr/local/etc/pdm-wba/src/wai_install_service.sh
 source /usr/local/etc/pdm-wba/src/wai_update_vars.sh
 
+# Check that file does not contain <INVALID_VAR>
 wai_validate_vars(){
     local file invalid_file filename
     file=$1
@@ -24,6 +25,7 @@ wai_validate_vars(){
     fi
 }
 
+# Validates that given file fulfills the minimal requirements for quadlet
 wai_validate_quadlet(){
     local file filename invalid_file
     file=$1
@@ -37,6 +39,7 @@ wai_validate_quadlet(){
     fi
 }
 
+# Validates that the given file fulfills the minimal requirements of network quadlet
 wai_validate_nw(){
     local file filename invalid_file
     file=$1
@@ -50,6 +53,7 @@ wai_validate_nw(){
     fi
 }
 
+# Validates that the given file fulfills the minimal requirements of volume quadlet
 wai_validate_vl(){
     local file filename invalid_file
     file=$1
@@ -63,6 +67,7 @@ wai_validate_vl(){
     fi
 }
 
+# Validates that the given file fulfills the minimal requirements of container quadlet
 wai_validate_cn(){
     local file filename
     file=$1
@@ -76,6 +81,7 @@ wai_validate_cn(){
     fi
 }
 
+# Prepares given file for installation
 wai_prepare_file(){
     local file
     file=$1
@@ -85,6 +91,7 @@ wai_prepare_file(){
     wai_validate_quadlet "${file}"
 }
 
+# Tries to install network quadlet
 wai_nw(){
     local file filename
     file=$1
@@ -95,6 +102,7 @@ wai_nw(){
     wai_install_service "${file}"
 }
 
+# Tries to install volume quadlet
 wai_vl(){
     local file filename
     file=$1
@@ -105,6 +113,7 @@ wai_vl(){
     wai_install_service "${file}"
 }
 
+# Tries to install container quadlet
 wai_cn(){
     local file filename
     file=$1
@@ -115,6 +124,7 @@ wai_cn(){
     wai_install_service "${file}"
 }
 
+# Handles drop-in of quadlets
 wai_handle_quadlet() {
     local files pattern
     pattern="$1"
@@ -132,6 +142,7 @@ wai_handle_quadlet() {
     fi
 }
 
+# Handles install request of quadlets
 wai_on_install_request() {
     wai_add_timer
     wai_user_srv

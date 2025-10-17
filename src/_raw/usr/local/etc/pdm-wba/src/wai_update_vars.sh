@@ -11,7 +11,7 @@ wai_update_vars(){
     cp "${file}" "${temp_file}"
 
     # Find all ${VAR} patterns in the file
-    vars=$(grep -o '\${[A-Za-z0-9_]*}' "$file" | sort -u | sed 's/\${//;s/}//')
+    vars=$(grep -o '\${[A-Za-z0-9_]*}' "${file}" | sort -u | sed 's/\${//;s/}//')
 
     source /etc/profile.d/wa.sh
 
