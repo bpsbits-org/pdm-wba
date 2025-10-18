@@ -7,8 +7,8 @@ wai_install_service(){
     local file filename dest_file service_name
     file=$1
     filename=$(basename "${file}")
-    service_name="${filename//./-}.service"
     [[ "$file" =~ \.(container|volume|network|pod)$ ]] || return 0
+    service_name=$(echo "${filename}" | sed -E 's/\.([^.]+)$/-\1.service/')
     dest_file="/home/wa/.config/containers/systemd/${filename}"
     if [ -f "${file}" ]; then
         mv "${file}" "${dest_file}"

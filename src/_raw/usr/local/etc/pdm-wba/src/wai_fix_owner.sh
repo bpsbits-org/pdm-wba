@@ -5,5 +5,5 @@
 # Changes the ownership of the specified file to the wa user
 wai_fix_owner(){
     local file=$1
-    chown wa:wa "${file}"
+    [ -e "${file}" ] && chown wa:wa "${file}"
 }

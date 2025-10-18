@@ -2,15 +2,15 @@
 # wa_conf_clone.sh
 # /usr/local/etc/pdm-wba/src
 
-# Tries to clone given configuration file if needed
-wa_conf_clone(){
+# Tries to clone a given configuration file if needed
+wa_conf_clone() {
     local src
     src="/var/lib/pdm-wba/tpl/$(basename "$1")"
     [ -f "${src}" ] && [ ! -f "$1" ] && cp "${src}" "$1"
 }
 
-# Imports configuration into system
-copy_conf_files_if_needed(){
+# Imports configuration into a system
+copy_conf_files_if_needed() {
     wa_conf_clone "/var/lib/pdm-wba/tpl/wa.conf"
     wa_conf_clone "/etc/fail2ban/jail.d/00-global.local"
     wa_conf_clone "/etc/fail2ban/jail.d/sshd.local"

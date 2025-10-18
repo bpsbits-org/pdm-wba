@@ -1,7 +1,7 @@
 Name: pdm-wba
-Version: 1.6.1
+Version: 1.7.0
 Release: 1%{?dist}
-Summary: Podman based Web Application Server
+Summary: Podman-based Web Application Server
 License: GPL-3.0-or-later
 BuildRequires: systemd-rpm-macros
 Source0: https://github.com/bpsbits-org/pdm-wba/archive/refs/heads/main.tar.gz
@@ -66,7 +66,11 @@ if [ $1 -eq 1 ]; then
     # Apply tmp files
     systemd-tmpfiles --create >/dev/null 2>&1 || :
     # Trigger the one-time setup timer
-    systemctl start pdm-wba-setup.timer >/dev/null 2>&1 || :
+    if systemctl list-unit-files | grep -q "pdm-wba-setup.timer"; then
+        systemctl start pdm-wba-setup.timer >/dev/null 2>&1 || :
+    else
+        echo "The service pdm-wba-setup.timer not found. Installation is incomplete."
+    fi
     echo 'System update completed.'
 fi
 
@@ -104,9 +108,7 @@ fi
 
 
 %changelog
-* Fri Oct 3 2025 PDM WBA Packager - 1.1.6
+* Sat Aug 9 2025 PDM WBA Packager - 1.5.0
 - Misc improvements
-* Fri Oct 3 2025 PDM WBA Packager - 1.1.5
-- Misc improvements
-* Mon Sep 22 2025 PDM WBA Packager - 1.1.0
+* Fri Jum 14 2024 PDM WBA Packager - 1.0.0
 - Initial release

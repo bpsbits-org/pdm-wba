@@ -3,7 +3,7 @@
 # /usr/local/bin
 
 source /usr/local/etc/pdm-wba/cnf/main.conf
-DEBOUNCE_TIMEOUT=5
+DEBOUNCE_TIMEOUT=2
 
 source /usr/local/etc/pdm-wba/src/wai_add_timer.sh
 source /usr/local/etc/pdm-wba/src/wai_user_srv.sh
@@ -11,12 +11,12 @@ source /usr/local/etc/pdm-wba/src/wai_fix_owner.sh
 source /usr/local/etc/pdm-wba/src/wai_install_service.sh
 source /usr/local/etc/pdm-wba/src/wai_update_vars.sh
 
-# Check that file does not contain <INVALID_VAR>
+# Check that the file does not contain <INVALID_VAR>
 wai_validate_vars(){
     local file invalid_file filename
     file=$1
     filename=$(basename "${file}")
-    # Check if file contains the invalid var marker
+    # Check if a file contains the invalid var marker
     if grep -q "<INVALID_VAR>" "$file"; then
         # File contains invalid variables, rename it
         invalid_file="${file}.invalid"
@@ -25,7 +25,7 @@ wai_validate_vars(){
     fi
 }
 
-# Validates that given file fulfills the minimal requirements for quadlet
+# Validates that a given file fulfills the minimal requirements for quadlet
 wai_validate_quadlet(){
     local file filename invalid_file
     file=$1
@@ -81,7 +81,7 @@ wai_validate_cn(){
     fi
 }
 
-# Prepares given file for installation
+# Prepares a given file for installation
 wai_prepare_file(){
     local file
     file=$1
@@ -152,7 +152,7 @@ wai_on_install_request() {
     wai_handle_quadlet ".container"
 }
 
-# Wait for debounce period
+# Wait for a debounced period
 sleep "${DEBOUNCE_TIMEOUT}"
 
 # Process in exact order

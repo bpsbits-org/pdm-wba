@@ -5,15 +5,22 @@
 # # Updates or adds a configuration key-value pair in WA conf
 wa_conf_update() {
     local key value conf_file
-    key="$1"
-    value="$2"
     conf_file="/var/lib/pdm-wba/wa.conf"
-    if [ ! -f "${conf_file}" ]; then
-        touch "${conf_file}"
-    fi
     # Check if both key and value are provided
     if [ $# -ne 2 ]; then
         echo -e "\033[1;33mError\033[0m: Invalid inputs. Usage: wa_conf_update <key> <value>" >&2
+        return 1
+    fi
+    key="$1"
+    value="$2"
+    # Trim whitespace, convert to uppercase, replace non-alphanumeric chars with _
+    key=$(echo "$key" | tr -s '[:space:]' | tr '[:lower:]' '[:upper:]' | tr -c '[:alnum:]' '_')
+    if [ ! -f "${conf_file}" ]; then
+        touch "${conf_file}"
+    fi
+    # Check if the key is empty
+    if [ -z "${key}" ]; then
+        echo -e "\033[1;33mError\033[0m: Key is required." >&2
         return 1
     fi
     # Update existing key or append new one

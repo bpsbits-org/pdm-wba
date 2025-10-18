@@ -6,26 +6,26 @@
 wait_for_tools() {
     local timeout=10
     local count=0
-    # First check if tools are already available
+    # First, check if tools are already available
     if command -v firewall-cmd >/dev/null 2>&1 && command -v semanage >/dev/null 2>&1; then
-        return 0  # Tools are available, exit immediately
+        return 0 # Tools are available, exit immediately
     fi
     # If tools aren't available yet, wait and check periodically
     echo "Waiting for tools to become available..."
-    while [ $count -lt $timeout ]; do
+    while [ "${count}" -lt "${timeout}" ]; do
         sleep 3
         count=$((count + 1))
         if command -v firewall-cmd >/dev/null 2>&1 && command -v semanage >/dev/null 2>&1; then
-            return 0  # Tools are now available
+            return 0 # Tools are now available
         fi
         echo "Still waiting... ($count/$timeout)"
     done
     # If we reached here, the tools were not available within the timeout
-    echo "Error: Required tools (firewall-cmd and semanage) not available after $timeout tries" >&2
+    echo "Error: Required tools (firewall-cmd and semanage) not available after ${timeout} tries" >&2
     return 1
 }
 
-wa_make_remote_rss_key_if_needed(){
+wa_make_remote_rss_key_if_needed() {
     local wa_rss_key_file wa_ssh_dir epoch
     epoch=$(date +%s)
     wa_rss_key_file="/home/wa/.ssh/wa_remote_rss"
@@ -39,8 +39,23 @@ wa_make_remote_rss_key_if_needed(){
     fi
 }
 
+# Update bashrc conf
+add_wa_profile_conf() {
+    local file_bashrc file_profile tpl_profile tpl_bashrc first_line
+    file_bashrc="/home/wa/.bashrc"
+    file_profile="/home/wa/.bash_profile"
+    tpl_bashrc='/var/lib/pdm-wba/tpl/tpl.bashrc.sh'
+    tpl_profile='/var/lib/pdm-wba/tpl/tpl.bash_profile.sh'
+    first_line=$(head -n 1 "${tpl_bashrc}")
+    if ! grep -Fx "${first_line}" "${file_bashrc}" >/dev/null; then
+        echo "Updating .bashrc"
+        cat "${tpl_bashrc}" >>"${file_bashrc}"
+    fi
+    cat "${tpl_profile}" >"${file_profile}"
+}
+
 # Prepares the system for WA by configuring services, firewall, SELinux, and user settings
-wa_prep_sys(){
+wa_prep_sys() {
     echo "Adjusting system..."
 
     # Wait for essential tools (max 10 seconds)
@@ -52,18 +67,7 @@ wa_prep_sys(){
     touch /var/lib/systemd/linger/wa
     chown root:root /var/lib/systemd/linger/wa
     chmod 0644 /var/lib/systemd/linger/wa
-# TODO Improvement needed
-cat >> /home/wa/.bashrc << 'EOF'
-source /usr/local/etc/pdm-wba/cnf/wa.conf
-source "${WA_USER_ALIASES}"
-wa_user_wa_aliases
-EOF
-# TODO Improvement needed
-cat > /home/wa/.bash_profile << 'EOF'
-if [ -f ~/.bashrc ]; then
-    source ~/.bashrc
-fi
-EOF
+    add_wa_profile_conf
     chown -R wa:wa /home/wa
     systemctl restart systemd-logind
     systemctl --machine="300@.host" --user enable systemd-tmpfiles-setup.service
